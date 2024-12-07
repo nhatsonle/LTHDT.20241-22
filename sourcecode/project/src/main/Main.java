@@ -10,6 +10,10 @@ public class Main {
 		simula.addProcess(2, 20, 80);
 		simula.addProcess(3, 30, 120);
 		simula.addProcess(4, 60, 200);
+		simula.addProcess(4, 60, 200);
+		simula.removeProcess(1, 0, 60);
+		simula.removeProcess(1, 0, 10);
 		simula.runSimulation();
 	}
+
 }

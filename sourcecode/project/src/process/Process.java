@@ -2,9 +2,6 @@ package process;
 
 import java.util.Random;
 
-// Thiếu ghi đè equals (giống lab 4 oop thực hành) để kiểm tra khi addProcess và removeProcess
-// nếu trùng id || khác id nhưng trùng arrival time, burst time, priority
-
 public class Process {
 	private int id;
 	private int arrivalTime; 
@@ -35,6 +32,7 @@ public class Process {
 	public void calculateTurnaroundTime() {
 		turnaroundTime = waitingTime + burstTime;
 	}
+    
 	public int getId() {
 		return id;
 	}
@@ -71,4 +69,22 @@ public class Process {
 	public void setTurnaroundTime(int turnaroundTime) {
 		this.turnaroundTime = turnaroundTime;
 	}
+
+	// Override equals()
+	@Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Process process = (Process) obj;
+        return id == process.id || (arrivalTime == process.arrivalTime && burstTime == process.burstTime && priority == process.priority);
+    }
+	
+	// Override toString()
+	@Override
+    public String toString() {
+        return String.format(
+            "Process(id = %d, arrivalTime = %d, burstTime = %d, priority = %d, waitingTime = %d, turnaroundTime = %d)",
+                     id, arrivalTime, burstTime, priority, waitingTime, turnaroundTime
+        );
+    }
 }

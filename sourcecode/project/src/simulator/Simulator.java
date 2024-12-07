@@ -18,13 +18,25 @@ public class Simulator {
 	private String cpuAlgorithmName;
 	private List<Process> processes = new ArrayList<Process>();
 	public void addProcess(int id, int arrivalTime, int burstTime) {
-		// Chưa kiểm tra đã có hay chưa
-        processes.add(new Process(id, arrivalTime, burstTime));
+		Process newProcess = new Process(id, arrivalTime, burstTime);
+        // Kiểm tra process có tồn tại ko
+        if (processes.contains(newProcess)) {
+            System.out.println("Đã tồn tại " +newProcess);
+        } else {
+            processes.add(new Process(id, arrivalTime, burstTime));
+        }
     }
+ 
 	public void removeProcess(int id, int arrivalTime, int burstTime) {
-		// Chưa kiểm tra đã có hay chưa
-        processes.remove(new Process(id, arrivalTime, burstTime));
+		Process ProcessRemoved = new Process(id, arrivalTime, burstTime);
+        // Kiểm tra process có tồn tại ko
+        if (processes.contains(ProcessRemoved)) {
+            processes.remove(ProcessRemoved);
+        } else {
+            System.out.println("Ko tồn tại " + ProcessRemoved);
+        }
     }
+        
 	public void runSimulation() {
 		switch(cpuAlgorithmName) {
 			case "FCFS":
