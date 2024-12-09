@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="700" prefWidth="1000" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <!-- Top Section -->
+    <top>
+        <HBox alignment="CENTER" spacing="20" style="-fx-padding: 10;" BorderPane.alignment="CENTER">
+            <!-- FCFS Panel -->
+            <VBox alignment="CENTER" prefHeight="191.0" prefWidth="811.0" spacing="10" style="-fx-border-color: black; -fx-border-width: 1;">
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="FCFS" />
+                <GridPane hgap="10" vgap="10">
+                    <children>
+                        <TextField prefWidth="50" promptText="Arrival Time" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <TextField prefWidth="50" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField prefWidth="50" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Button layoutX="132.0" layoutY="10.0" prefHeight="26.0" prefWidth="40.0" style="-fx-background-color: green;" text="+" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <Button layoutX="132.0" layoutY="46.0" prefHeight="26.0" prefWidth="40.0" style="-fx-background-color: green;" text="+" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <Button layoutX="167.0" layoutY="46.0" prefHeight="26.0" prefWidth="40.0" style="-fx-background-color: red;" text="-" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                  <TextField layoutX="10.0" layoutY="10.0" prefWidth="50" promptText="Process" />
+                  <TextField layoutX="71.0" layoutY="46.0" prefWidth="50" GridPane.rowIndex="1" />
+                  <TextField layoutX="10.0" layoutY="46.0" prefWidth="50" GridPane.rowIndex="2" />
+                  <Button layoutX="132.0" layoutY="46.0" prefHeight="26.0" prefWidth="40.0" style="-fx-background-color: green;" text="+" GridPane.columnIndex="3" />
+                  <Button layoutX="167.0" layoutY="82.0" prefHeight="26.0" prefWidth="40.0" style="-fx-background-color: red;" text="-" GridPane.columnIndex="4" />
+                  <Button layoutX="167.0" layoutY="10.0" prefHeight="26.0" prefWidth="40.0" style="-fx-background-color: red;" text="-" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                  <TextField layoutX="71.0" layoutY="10.0" prefWidth="50" promptText="Burst Time" GridPane.columnIndex="2" />
+                  <TextField layoutX="132.0" layoutY="10.0" prefWidth="50" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <TextField layoutX="71.0" layoutY="47.0" prefWidth="50" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                    </children>
+               <columnConstraints>
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints maxHeight="27.200003051757804" minHeight="27.200003051757804" prefHeight="27.200003051757804" />
+                  <RowConstraints maxHeight="25.599996948242193" minHeight="25.599996948242193" prefHeight="25.599996948242193" />
+               </rowConstraints>
+               <VBox.margin>
+                  <Insets left="41.0" />
+               </VBox.margin>
+                </GridPane>
+                <HBox prefHeight="38.0" prefWidth="555.0" spacing="10">
+                    <Button onAction="#loginButtonClicked" text="Run" />
+                    <Button text="Clear" />
+               <VBox.margin>
+                  <Insets left="126.0" />
+               </VBox.margin>
+                </HBox>
+            </VBox>
+        </HBox>
+    </top>
+
+    <!-- Middle Section -->
+    <center>
+        <HBox alignment="CENTER" spacing="20" style="-fx-padding: 10;">
+            <!-- Live Output Table -->
+            <VBox prefHeight="222.0" prefWidth="483.0" spacing="10" style="-fx-border-color: black; -fx-border-width: 1;">
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Live Output Table">
+               <VBox.margin>
+                  <Insets left="165.0" />
+               </VBox.margin>
+            </Label>
+                <TableView>
+                    <columns>
+                        <TableColumn text="Process" />
+                        <TableColumn text="Arrival" />
+                        <TableColumn text="Burst" />
+                        <TableColumn text="Completion" />
+                        <TableColumn text="Turnaround" />
+                        <TableColumn text="Waiting" />
+                    </columns>
+                </TableView>
+            </VBox>
+
+                  <!-- Scheduling Metrics -->
+            <VBox prefWidth="300" spacing="10" style="-fx-border-color: black; -fx-border-width: 1;">
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Scheduling Metrics">
+               <VBox.margin>
+                  <Insets left="56.0" top="42.0" />
+               </VBox.margin>
+            </Label>
+                <Label prefHeight="27.0" prefWidth="242.0" style="-fx-background-color: cyan; -fx-padding: 5;" text="Average Wait Time: 1.50 s">
+               <VBox.margin>
+                  <Insets left="28.0" />
+               </VBox.margin>
+            </Label>
+                <Label prefHeight="27.0" prefWidth="243.0" style="-fx-background-color: cyan; -fx-padding: 5;" text="Average Turn Around Time: 5.50 s">
+               <VBox.margin>
+                  <Insets left="27.0" />
+               </VBox.margin>
+            </Label>
+                <Label prefHeight="27.0" prefWidth="242.0" style="-fx-background-color: cyan; -fx-padding: 5;" text="Average Completion Time: 9.00 s">
+               <VBox.margin>
+                  <Insets bottom="1.0" left="29.0" />
+               </VBox.margin>
+            </Label>
+            </VBox>
+        </HBox>
+    </center>
+
+    <!-- Bottom Section -->
+    <bottom>
+        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 10;">
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Gantt Chart" />
+            <HBox prefHeight="73.0" prefWidth="979.0" spacing="2">
+                <!-- Example Gantt blocks -->
+                <Label prefHeight="71.0" prefWidth="34.0" style="-fx-background-color: lightgray; -fx-padding: 10;" text="P1">
+               <HBox.margin>
+                  <Insets left="83.0" />
+               </HBox.margin></Label>
+                <Label prefHeight="70.0" prefWidth="34.0" style="-fx-background-color: green; -fx-padding: 10;" text="P2" />
+                <Label prefHeight="70.0" prefWidth="34.0" style="-fx-background-color: red; -fx-padding: 10;" text="P1" />
+            </HBox>
+         <HBox prefHeight="100.0" prefWidth="200.0" />
+        </VBox>
+    </bottom>
+</BorderPane>
