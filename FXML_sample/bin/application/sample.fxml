@@ -16,60 +16,14 @@
 <BorderPane prefHeight="700" prefWidth="1000" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <!-- Top Section -->
     <top>
-        <HBox alignment="CENTER" spacing="20" style="-fx-padding: 10;" BorderPane.alignment="CENTER">
-            <!-- FCFS Panel -->
-            <VBox alignment="CENTER" prefHeight="191.0" prefWidth="811.0" spacing="10" style="-fx-border-color: black; -fx-border-width: 1;">
-                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="FCFS" />
-                <GridPane hgap="10" vgap="10">
-                    <children>
-                        <TextField prefWidth="50" promptText="Arrival Time" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                        <TextField prefWidth="50" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField prefWidth="50" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Button layoutX="132.0" layoutY="10.0" prefHeight="26.0" prefWidth="40.0" style="-fx-background-color: green;" text="+" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <Button layoutX="132.0" layoutY="46.0" prefHeight="26.0" prefWidth="40.0" style="-fx-background-color: green;" text="+" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                  <Button layoutX="167.0" layoutY="46.0" prefHeight="26.0" prefWidth="40.0" style="-fx-background-color: red;" text="-" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                  <TextField layoutX="10.0" layoutY="10.0" prefWidth="50" promptText="Process" />
-                  <TextField layoutX="71.0" layoutY="46.0" prefWidth="50" GridPane.rowIndex="1" />
-                  <TextField layoutX="10.0" layoutY="46.0" prefWidth="50" GridPane.rowIndex="2" />
-                  <Button layoutX="132.0" layoutY="46.0" prefHeight="26.0" prefWidth="40.0" style="-fx-background-color: green;" text="+" GridPane.columnIndex="3" />
-                  <Button layoutX="167.0" layoutY="82.0" prefHeight="26.0" prefWidth="40.0" style="-fx-background-color: red;" text="-" GridPane.columnIndex="4" />
-                  <Button layoutX="167.0" layoutY="10.0" prefHeight="26.0" prefWidth="40.0" style="-fx-background-color: red;" text="-" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                  <TextField layoutX="71.0" layoutY="10.0" prefWidth="50" promptText="Burst Time" GridPane.columnIndex="2" />
-                  <TextField layoutX="132.0" layoutY="10.0" prefWidth="50" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <TextField layoutX="71.0" layoutY="47.0" prefWidth="50" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                    </children>
-               <columnConstraints>
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints />
-                  <RowConstraints />
-                  <RowConstraints />
-               </rowConstraints>
-               <VBox.margin>
-                  <Insets left="41.0" />
-               </VBox.margin>
-                </GridPane>
-                <HBox prefHeight="37.0" prefWidth="272.0" spacing="10">
-                    <Button onAction="#loginButtonClicked" text="Run" />
-                    <Button text="Clear" />
-               <VBox.margin>
-                  <Insets left="126.0" />
-               </VBox.margin>
-                </HBox>
-            </VBox>
-        </HBox>
+        <fx:include source="../view/TableProcessView.fxml" />
     </top>
 
     <!-- Middle Section -->
     <center>
         <HBox alignment="CENTER" spacing="20" style="-fx-padding: 10;">
             <!-- Live Output Table -->
-            <VBox prefWidth="500" spacing="10" style="-fx-border-color: black; -fx-border-width: 1;">
+            <VBox prefHeight="222.0" prefWidth="483.0" spacing="10" style="-fx-border-color: black; -fx-border-width: 1;">
                 <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Live Output Table">
                <VBox.margin>
                   <Insets left="165.0" />
