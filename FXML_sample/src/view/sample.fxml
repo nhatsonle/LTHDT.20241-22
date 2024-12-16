@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AlgorithmController">
+    <BorderPane prefWidth="1000">
+        <!-- Top Section -->
+        <top>
+            <VBox alignment="CENTER_LEFT" spacing="10">
+                <HBox alignment="CENTER_LEFT" prefWidth="1000.0">
+        			<Label fx:id="algorithmLabel" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Tên của thuật toán" />
+    			</HBox>
+                <fx:include source="../view/TableProcessView.fxml" />
+               	<HBox alignment="CENTER_LEFT" prefWidth="1000.0">
+        			<Button mnemonicParsing="false" text="Run" />
+    			</HBox>
+            </VBox>
+        </top>
+
+        <!-- Middle Section -->
+        <center>
+            <HBox alignment="CENTER" spacing="20" style="-fx-padding: 10;">
+                <!-- Live Output Table -->
+                <VBox prefHeight="222.0" prefWidth="483.0" spacing="10" style="-fx-border-color: black; -fx-border-width: 1;">
+                    <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Live Output Table">
+                        <VBox.margin>
+                            <Insets left="165.0" />
+                        </VBox.margin>
+                    </Label>
+                    <TableView>
+                        <columns>
+                            <TableColumn text="Process" />
+                            <TableColumn text="Arrival" />
+                            <TableColumn text="Burst" />
+                            <TableColumn text="Completion" />
+                            <TableColumn text="Turnaround" />
+                            <TableColumn text="Waiting" />
+                        </columns>
+                    </TableView>
+                </VBox>
+					
+                <!-- Scheduling Metrics -->
+                <VBox prefWidth="300" spacing="10" style="-fx-border-color: black; -fx-border-width: 1;">
+                    <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Scheduling Metrics">
+                        <VBox.margin>
+                            <Insets left="56.0" top="42.0" />
+                        </VBox.margin>
+                    </Label>
+                    <Label prefHeight="27.0" prefWidth="242.0" style="-fx-background-color: cyan; -fx-padding: 5;" text="Average Wait Time: 1.50 s">
+                        <VBox.margin>
+                            <Insets left="28.0" />
+                        </VBox.margin>
+                    </Label>
+                    <Label prefHeight="27.0" prefWidth="243.0" style="-fx-background-color: cyan; -fx-padding: 5;" text="Average Turn Around Time: 5.50 s">
+                        <VBox.margin>
+                            <Insets left="27.0" />
+                        </VBox.margin>
+                    </Label>
+                    <Label prefHeight="27.0" prefWidth="242.0" style="-fx-background-color: cyan; -fx-padding: 5;" text="Average Completion Time: 9.00 s">
+                        <VBox.margin>
+                            <Insets bottom="1.0" left="29.0" />
+                        </VBox.margin>
+                    </Label>
+                </VBox>
+            </HBox>
+        </center>
+
+        <!-- Bottom Section -->
+        <bottom>
+            <VBox alignment="CENTER" spacing="10" style="-fx-padding: 10;">
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Gantt Chart" />
+                <HBox prefHeight="73.0" prefWidth="979.0" spacing="2">
+                    <!-- Example Gantt blocks -->
+                    <Label prefHeight="71.0" prefWidth="34.0" style="-fx-background-color: lightgray; -fx-padding: 10;" text="P1">
+                        <HBox.margin>
+                            <Insets left="83.0" />
+                        </HBox.margin>
+                    </Label>
+                    <Label prefHeight="70.0" prefWidth="34.0" style="-fx-background-color: green; -fx-padding: 10;" text="P2" />
+                    <Label prefHeight="70.0" prefWidth="34.0" style="-fx-background-color: red; -fx-padding: 10;" text="P1" />
+                </HBox>
+                <HBox prefHeight="100.0" prefWidth="200.0" />
+            </VBox>
+        </bottom>
+    </BorderPane>
+</ScrollPane>
