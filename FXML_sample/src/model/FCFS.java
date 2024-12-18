@@ -1,8 +1,10 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FCFS extends CPUAlgorithm {
+	
 	public FCFS() {
 		this.setName("FCFS");
 	}
@@ -30,10 +32,14 @@ public class FCFS extends CPUAlgorithm {
 			System.out.printf("    P%d     |      %d      |     %d     |      %d      |       %d%n", process.getId(), process.getArrivalTime(), process.getBurstTime(), process.getWaitingTime(), process.getTurnaroundTime());
 		}
 		int n = processes.size();
+		avgWaitingTime = totalWaitingTime / n;
+        avgTurnAroundTime = totalTurnAroundTime / n;
 		System.out.println("-------------------------------------------------------------");
-        System.out.printf("Thời gian chờ trung bình: %.2f%n", (double) totalWaitingTime / n);
-        System.out.printf("Thời gian quay vòng trung bình: %.2f%n", (double) totalTurnAroundTime / n);
+        System.out.printf("Thời gian chờ trung bình: %.2f%n", avgWaitingTime);
+        System.out.printf("Thời gian quay vòng trung bình: %.2f%n", avgTurnAroundTime);
+        
 	}
+	
 	@Override
 	public String displayHelp() {
 	    return """
@@ -55,5 +61,6 @@ public class FCFS extends CPUAlgorithm {
 	    - Thời gian chờ đợi trung bình có thể cao nếu Arrival Time và Burst Time không tối ưu.
 	    """;
 	}
+
 
 }

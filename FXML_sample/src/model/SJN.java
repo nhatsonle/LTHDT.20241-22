@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SJN extends CPUAlgorithm {
+	
 	public SJN() {
 		this.setName("SJN");
 	}
@@ -62,9 +63,12 @@ public class SJN extends CPUAlgorithm {
         }
 
         int n = processes.size();
+        avgWaitingTime = totalWaitingTime / n;
+        avgTurnAroundTime = totalTurnaroundTime / n;
         System.out.println("-------------------------------------------------------------");
-        System.out.printf("Thời gian chờ trung bình: %.2f%n", (double) totalWaitingTime / n);
-        System.out.printf("Thời gian quay vòng trung bình: %.2f%n", (double) totalTurnaroundTime / n);
+        System.out.printf("Thời gian chờ trung bình: %.2f%n", avgWaitingTime);
+        System.out.printf("Thời gian quay vòng trung bình: %.2f%n", avgTurnAroundTime);
+        
         }
 	@Override
 	public String displayHelp() {
@@ -81,4 +85,6 @@ public class SJN extends CPUAlgorithm {
 	    - Dễ dẫn đến Starvation (tiến trình dài bị bỏ qua).
 	    """;
 	}
+	
+	
 }

@@ -14,7 +14,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import model.CPUAlgorithm;
+import model.FCFS;
 import model.Process;
+import model.RoundRobin;
+import model.SJN;
+import model.SharedData;
 
 public class TableProcessController implements Initializable {
 	@FXML
@@ -38,19 +43,26 @@ public class TableProcessController implements Initializable {
 	@FXML
 	private Button proceed;
 	
+	@FXML
+    private Button runButton;
+	
+	
 	private ObservableList<Process> processList;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
-		processList = FXCollections.observableArrayList(
-				new Process(1, 0, 20),
-				new Process(2, 10, 30)
-		);
+		processList = FXCollections.observableArrayList();
 		idColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("id"));
 		arrivalTimeColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("arrivalTime"));
 		burstTimeColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("burstTime"));
 		priorityColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("priority"));
+		
+		 // Set alignment of columns
+        idColumn.setStyle("-fx-alignment: CENTER;");
+        arrivalTimeColumn.setStyle("-fx-alignment: CENTER;");
+        burstTimeColumn.setStyle("-fx-alignment: CENTER;");
+        priorityColumn.setStyle("-fx-alignment: CENTER;");
 		table.setItems(processList);
 	}
 	
@@ -208,7 +220,63 @@ public class TableProcessController implements Initializable {
 	        alert.showAndWait();
 	    }
 	}
+	
+	@FXML
+    void runSimulation(ActionEvent event) {
+		SharedData.clearProcesses();
+		Object algo = SharedData.getCurrentAlgorithm();
+		String algoName = ((CPUAlgorithm)algo).getName();
+		
+		switch(algoName) {
+		case "FCFS":
+			runFCFS();
+			break;
+		case "SJN":
+			runSJN();
+			break;
+		case "Round Robin":
+			runRR();
+			break;
+		default:
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+	        alert.setTitle("Thông báo");
+	        alert.setHeaderText("Tên thuật toán không hợp lệ");
+	        alert.setContentText("Vui lòng lựa chọn lại thuật toán");
+	        alert.showAndWait();
+		}
+    }
 
+	void runFCFS()
+	{
+		FCFS fcfs = new FCFS();
+		fcfs.schedule(processList);
+		for(Process p : processList) {
+			SharedData.addProcess(p);
+		}
+		SharedData.setWT(fcfs.getAvgWaitingTime());
+		SharedData.setTRT(fcfs.getAvgTurnAroundTime());
+	}
 
+	void runSJN()
+	{
+		SJN sjn = new SJN();
+		sjn.schedule(processList);
+		for(Process p : processList) {
+			SharedData.addProcess(p);
+		}
+		SharedData.setWT(sjn.getAvgWaitingTime());
+		SharedData.setTRT(sjn.getAvgTurnAroundTime());
+	}
+	
+	void runRR()
+	{
+		RoundRobin rr = new RoundRobin();
+		rr.schedule(processList);
+		for(Process p : processList) {
+			SharedData.addProcess(p);
+		}
+		SharedData.setWT(rr.getAvgWaitingTime());
+		SharedData.setTRT(rr.getAvgTurnAroundTime());
+	}
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Queue;
 
 public class RoundRobin extends CPUAlgorithm {
+	
 	private int timeQuantum;
 	public RoundRobin() {
 		this.setName("Round Robin");
@@ -79,10 +80,13 @@ public class RoundRobin extends CPUAlgorithm {
         }
 
         int n = processes.size();
+        avgWaitingTime = totalWaitingTime / n;
+        avgTurnAroundTime = totalTurnaroundTime / n;
         System.out.println("---------------------------------------------------------------");
-        System.out.printf("Thời gian chờ trung bình: %.2f%n", (double) totalWaitingTime / n);
-        System.out.printf("Thời gian quay vòng trung bình: %.2f%n", (double) totalTurnaroundTime / n);
+        System.out.printf("Thời gian chờ trung bình: %.2f%n", avgWaitingTime);
+        System.out.printf("Thời gian quay vòng trung bình: %.2f%n", avgTurnAroundTime);
 	}
+	
 	@Override
 	public String displayHelp() {
 	    return """
@@ -104,5 +108,5 @@ public class RoundRobin extends CPUAlgorithm {
 	    - Thời gian chờ đợi trung bình có thể cao nếu Arrival Time và Burst Time không tối ưu.
 	    """;
 	}
-
+	
 }

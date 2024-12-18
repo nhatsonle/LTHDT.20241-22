@@ -19,7 +19,7 @@ public class Main extends Application {
         controller.setPrimaryStage(primaryStage);
         
 		Scene scene = new Scene(root, 800, 600);
-		primaryStage.setTitle("Hello");
+		primaryStage.setTitle("CPU Scheduling Simulator");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}

@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -22,7 +21,7 @@
          <padding>
             <Insets left="10.0" top="8.0" />
          </padding></Label>
-        <TableView fx:id="table" minHeight="500.0" prefHeight="500.0">
+        <TableView fx:id="table" minHeight="500.0" prefHeight="500.0" prefWidth="618.0">
             <columns>
                 <TableColumn fx:id="idColumn" prefWidth="123.20000475645065" text="Process Id" />
                 <TableColumn fx:id="arrivalTimeColumn" prefWidth="158.4001235961914" text="Arrival Time" />
@@ -72,32 +71,42 @@
                </HBox>
                <HBox alignment="CENTER">
                   <children>
-                     <Label prefHeight="18.0" prefWidth="90.0" text="Priority" />
+                     <Label prefHeight="18.0" prefWidth="90.0" text="Quantum Time" />
                      <TextField fx:id="priorityText" prefHeight="26.0" prefWidth="150.0" />
                   </children>
+               </HBox>
+               <HBox spacing="15.0">
+                  <children>
+                     <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#addProcess" prefHeight="26.0" prefWidth="46.0" text="Add " />
+                     <Button mnemonicParsing="false" onAction="#removeProcess" prefHeight="26.0" text="Remove " />
+                     <Button mnemonicParsing="false" onAction="#editProcess" prefHeight="26.0" text="Edit " />
+                     <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#clearProcessList" prefHeight="26.0" prefWidth="63.0" text="Clear">
+                        <cursor>
+                           <Cursor fx:constant="OPEN_HAND" />
+                        </cursor>
+                     </Button>
+                  </children>
+                  <VBox.margin>
+                     <Insets bottom="15.0" top="15.0" />
+                  </VBox.margin>
                </HBox>
             </children>
             <VBox.margin>
                <Insets bottom="20.0" />
             </VBox.margin>
          </VBox>
-         <ButtonBar prefHeight="40.0" prefWidth="200.0">
-           <buttons>
-               <Button mnemonicParsing="false" onAction="#addProcess" text="Add " />
-               <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#removeProcess" text="Remove " />
-               <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#editProcess" text="Edit " />
-               <Button fx:id="proceed" minWidth="-Infinity" onAction="#updateProcess" text="Proceed" visible="false" />
-           </buttons>
-         </ButtonBar>
-         <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
-            <buttons>
-               <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#clearProcessList" text="Clear" translateX="-21.0">
+         <HBox prefWidth="258.0" spacing="15.0">
+            <children>
+               <Button fx:id="runButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#runSimulation" prefHeight="46.0" prefWidth="104.0" text="Run" textFill="#b13030">
                   <cursor>
                      <Cursor fx:constant="OPEN_HAND" />
                   </cursor>
+                  <font>
+                     <Font name="System Bold" size="23.0" />
+                  </font>
                </Button>
-            </buttons>
-         </ButtonBar>
+            </children>
+         </HBox>
       </children>
    </VBox>
 </HBox>
