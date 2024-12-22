@@ -77,7 +77,6 @@ public class AlgorithmController implements Initializable {
             algorithmLabel.setText("Chưa chọn thuật toán!");
         }
         
-        
         colID.setCellValueFactory(new PropertyValueFactory<Process, Integer>("id"));
         colArrival.setCellValueFactory(new PropertyValueFactory<Process, Integer>("arrivalTime"));
         colBurst.setCellValueFactory(new PropertyValueFactory<Process, Integer>("burstTime"));

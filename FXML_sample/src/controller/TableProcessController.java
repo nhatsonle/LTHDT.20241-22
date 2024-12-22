@@ -41,6 +41,8 @@ public class TableProcessController implements Initializable {
 	@FXML
 	private TextField priorityText;
 	@FXML
+	private TextField timeQuantumText;
+	@FXML
 	private Button proceed;
 	
 	@FXML
@@ -269,8 +271,13 @@ public class TableProcessController implements Initializable {
 	}
 	
 	void runRR()
-	{
-		RoundRobin rr = new RoundRobin();
+	{	
+		RoundRobin rr;
+		if(timeQuantumText.getText() != null && !timeQuantumText.getText().isEmpty()) {
+			rr = new RoundRobin(Integer.parseInt(timeQuantumText.getText()));
+		} else {
+			rr = new RoundRobin();
+		}
 		rr.schedule(processList);
 		for(Process p : processList) {
 			SharedData.addProcess(p);
