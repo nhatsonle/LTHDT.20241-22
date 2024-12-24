@@ -5,7 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import javafx.collections.ObservableList;
+
 public class RoundRobin extends CPUAlgorithm {
+	
 	private int timeQuantum;
 	public RoundRobin() {
 		this.setName("Round Robin");
@@ -22,9 +25,19 @@ public class RoundRobin extends CPUAlgorithm {
 	public void setTimeQuantum(int timeQuantum) {
 		this.timeQuantum = timeQuantum;
 	}
-	public void schedule(List<Process> processes) {
-		// Sort theo thời gian đến 
-		processes.sort((p1, p2) -> Integer.compare(p1.getArrivalTime(), p2.getArrivalTime()));
+	@Override
+	public void schedule(ObservableList<Process> processes) {
+		// Sắp xếp tiến trình theo thời gian đến || thời gian thực hiện || priority
+		processes.sort((p1, p2) -> {
+            if (p1.getArrivalTime() != p2.getArrivalTime()) {
+                return Integer.compare(p1.getArrivalTime(), p2.getArrivalTime());
+            } else if (p1.getBurstTime() != p2.getBurstTime()) {
+                return Integer.compare(p1.getBurstTime(), p2.getBurstTime());
+            } else {
+                return Integer.compare(p1.getPriority(), p2.getPriority());
+            }
+        });
+
 		Queue<Process> readyQueue = new LinkedList<>(processes); // Hàng đợi sẵn sàng
         int currentTime = 0;
         int totalWaitingTime = 0;
@@ -37,7 +50,7 @@ public class RoundRobin extends CPUAlgorithm {
             remainingBurstTime.add(process.getBurstTime());
         }
 
-        System.out.println("Tiến trình | Arrival Time | Burst Time | Start Time | Finish Time");
+        System.out.println("Tiến trình | Arrival Time | Burst Time | Waiting Time | Burst Time");
         System.out.println("---------------------------------------------------------------");
 
         while (!readyQueue.isEmpty()) {
@@ -74,15 +87,19 @@ public class RoundRobin extends CPUAlgorithm {
 
                 System.out.printf("    P%d     |      %d      |     %d     |     %d     |      %d%n",
                         currentProcess.getId(), currentProcess.getArrivalTime(),
-                        currentProcess.getBurstTime(), startTime, finishTime);
+                        currentProcess.getBurstTime(), currentProcess.getWaitingTime(), currentProcess.getTurnaroundTime());
             }
         }
 
         int n = processes.size();
+        avgWaitingTime = (double)totalWaitingTime / n;
+        avgTurnAroundTime = (double)totalTurnaroundTime / n;
         System.out.println("---------------------------------------------------------------");
-        System.out.printf("Thời gian chờ trung bình: %.2f%n", (double) totalWaitingTime / n);
-        System.out.printf("Thời gian quay vòng trung bình: %.2f%n", (double) totalTurnaroundTime / n);
+        System.out.printf("Thời gian chờ trung bình: %.2f%n", avgWaitingTime);
+        System.out.printf("Thời gian quay vòng trung bình: %.2f%n", avgTurnAroundTime);
+        System.out.println(timeQuantum);
 	}
+	
 	@Override
 	public String displayHelp() {
 	    return """
@@ -104,5 +121,5 @@ public class RoundRobin extends CPUAlgorithm {
 	    - Thời gian chờ đợi trung bình có thể cao nếu Arrival Time và Burst Time không tối ưu.
 	    """;
 	}
-
+	
 }

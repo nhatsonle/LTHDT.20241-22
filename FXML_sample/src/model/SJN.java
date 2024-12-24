@@ -3,11 +3,15 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.collections.ObservableList;
+
 public class SJN extends CPUAlgorithm {
+	
 	public SJN() {
 		this.setName("SJN");
 	}
-	public void schedule(List<Process> processes) {
+	@Override
+	public void schedule(ObservableList<Process> processes) {
 		// Tạo danh sách tạm thời 
 		List<Process> readyQueue  = new ArrayList<>(processes);
 		int currentTime = 0;
@@ -33,10 +37,16 @@ public class SJN extends CPUAlgorithm {
                         .orElse(currentTime);
                 continue;
             }
-
-            // Chọn tiến trình có burst time nhỏ nhất trong số các tiến trình đã đến
+            
+         // Chọn tiến trình có Burst Time nhỏ nhất; nếu trùng thì dựa trên Priority
             Process selectedProcess = availableProcesses.stream()
-                    .min((p1, p2) -> Integer.compare(p1.getBurstTime(), p2.getBurstTime()))
+                    .min((p1, p2) -> {
+                        if (p1.getBurstTime() != p2.getBurstTime()) {
+                            return Integer.compare(p1.getBurstTime(), p2.getBurstTime());
+                        } else {
+                            return Integer.compare(p1.getPriority(), p2.getPriority());
+                        }
+                    })
                     .orElse(null);
             
             
@@ -62,9 +72,12 @@ public class SJN extends CPUAlgorithm {
         }
 
         int n = processes.size();
+        avgWaitingTime = (double)totalWaitingTime / n;
+        avgTurnAroundTime = (double)totalTurnaroundTime / n;
         System.out.println("-------------------------------------------------------------");
-        System.out.printf("Thời gian chờ trung bình: %.2f%n", (double) totalWaitingTime / n);
-        System.out.printf("Thời gian quay vòng trung bình: %.2f%n", (double) totalTurnaroundTime / n);
+        System.out.printf("Thời gian chờ trung bình: %.2f%n", avgWaitingTime);
+        System.out.printf("Thời gian quay vòng trung bình: %.2f%n", avgTurnAroundTime);
+        
         }
 	@Override
 	public String displayHelp() {
@@ -81,4 +94,6 @@ public class SJN extends CPUAlgorithm {
 	    - Dễ dẫn đến Starvation (tiến trình dài bị bỏ qua).
 	    """;
 	}
+	
+	
 }

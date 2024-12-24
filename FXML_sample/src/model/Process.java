@@ -33,11 +33,11 @@ public class Process {
 	}
 	// Tính thời gian chờ
 	public void calculateWaitingTime(int startTime) {
-		waitingTime = startTime - arrivalTime;
+		this.waitingTime = startTime - arrivalTime;
 	}
 	// Tính thời gian quay vòng
 	public void calculateTurnaroundTime() {
-		turnaroundTime = waitingTime + burstTime;
+		this.turnaroundTime = waitingTime + burstTime;
 	}
 	public int getId() {
 		return id;
@@ -66,15 +66,11 @@ public class Process {
 	public int getWaitingTime() {
 		return waitingTime;
 	}
-	public void setWaitingTime(int waitingTime) {
-		this.waitingTime = waitingTime;
-	}
+	
 	public int getTurnaroundTime() {
 		return turnaroundTime;
 	}
-	public void setTurnaroundTime(int turnaroundTime) {
-		this.turnaroundTime = turnaroundTime;
-	}
+	
 	
 	@Override
     public boolean equals(Object obj) {
