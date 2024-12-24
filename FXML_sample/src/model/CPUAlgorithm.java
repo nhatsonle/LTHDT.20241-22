@@ -1,5 +1,7 @@
 package model;
 
+import javafx.collections.ObservableList;
+
 public abstract class CPUAlgorithm {
 	public double avgWaitingTime;
 	public double avgTurnAroundTime;
@@ -19,4 +21,6 @@ public abstract class CPUAlgorithm {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public abstract void schedule(ObservableList<Process> processList);
 }

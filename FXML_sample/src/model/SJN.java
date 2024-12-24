@@ -3,12 +3,15 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.collections.ObservableList;
+
 public class SJN extends CPUAlgorithm {
 	
 	public SJN() {
 		this.setName("SJN");
 	}
-	public void schedule(List<Process> processes) {
+	@Override
+	public void schedule(ObservableList<Process> processes) {
 		// Tạo danh sách tạm thời 
 		List<Process> readyQueue  = new ArrayList<>(processes);
 		int currentTime = 0;

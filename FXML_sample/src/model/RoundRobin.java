@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import javafx.collections.ObservableList;
+
 public class RoundRobin extends CPUAlgorithm {
 	
 	private int timeQuantum;
@@ -23,7 +25,8 @@ public class RoundRobin extends CPUAlgorithm {
 	public void setTimeQuantum(int timeQuantum) {
 		this.timeQuantum = timeQuantum;
 	}
-	public void schedule(List<Process> processes) {
+	@Override
+	public void schedule(ObservableList<Process> processes) {
 		// Sắp xếp tiến trình theo thời gian đến || thời gian thực hiện || priority
 		processes.sort((p1, p2) -> {
             if (p1.getArrivalTime() != p2.getArrivalTime()) {

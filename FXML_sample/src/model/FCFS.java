@@ -2,12 +2,15 @@ package model;
 
 import java.util.List;
 
+import javafx.collections.ObservableList;
+
 public class FCFS extends CPUAlgorithm {
 	
 	public FCFS() {
 		this.setName("FCFS");
 	}
-	public void schedule(List<Process> processes) {
+	@Override
+	public void schedule(ObservableList<Process> processes) {
 		// Sắp xếp tiến trình theo thời gian đến || thời gian thực hiện || priority
 		processes.sort((p1, p2) -> {
             if (p1.getArrivalTime() != p2.getArrivalTime()) {

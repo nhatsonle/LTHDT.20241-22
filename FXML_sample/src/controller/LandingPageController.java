@@ -5,7 +5,6 @@ import model.CPUAlgorithm;
 import model.FCFS;
 import model.RoundRobin;
 import model.SJN;
-import model.SharedData;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -22,16 +21,29 @@ public class LandingPageController {
 	private CPUAlgorithm sjn = new SJN();
 	private CPUAlgorithm roundrobin = new RoundRobin();
     private Stage primaryStage;
+    private AlgorithmController algorithmController;
 
     public void setPrimaryStage(Stage stage) {
         this.primaryStage = stage;
     }
+    
+    public void setSamplePage(AlgorithmController algorithmController) {
+    	this.algorithmController = algorithmController;
+    }
 
     @FXML
-    public void loadSamplePage() {
+    public void loadAlgorithmPage(String algorithmName) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/sample.fxml"));
             Parent root = loader.load();
+
+            // Lấy controller của sample (AlgorithmController)
+            AlgorithmController algorithmController = loader.getController();
+            
+            // Truyền tên của thuận toán 
+            algorithmController.setTitle(algorithmName);
+
+            // Hiển thị giao diện
             Scene scene = new Scene(root, 800, 600);
             primaryStage.setScene(scene);
         } catch (Exception e) {
@@ -49,18 +61,15 @@ public class LandingPageController {
     @FXML
     public void initialize() {
         fcfsMenu.setOnAction(event -> {
-            SharedData.setCurrentAlgorithm(new FCFS());
-            loadSamplePage();
+            loadAlgorithmPage("FCFS");
         });
 
         sjnMenu.setOnAction(event -> {
-            SharedData.setCurrentAlgorithm(new SJN());
-            loadSamplePage();
+            loadAlgorithmPage("SJN");
         });
 
         rrMenu.setOnAction(event -> {
-            SharedData.setCurrentAlgorithm(new RoundRobin());
-            loadSamplePage();
+            loadAlgorithmPage("Round Robin");
         });
     }
     
