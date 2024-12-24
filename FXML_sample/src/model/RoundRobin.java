@@ -97,6 +97,7 @@ public class RoundRobin extends CPUAlgorithm {
         System.out.println("---------------------------------------------------------------");
         System.out.printf("Thời gian chờ trung bình: %.2f%n", avgWaitingTime);
         System.out.printf("Thời gian quay vòng trung bình: %.2f%n", avgTurnAroundTime);
+        System.out.println(timeQuantum);
 	}
 	
 	@Override

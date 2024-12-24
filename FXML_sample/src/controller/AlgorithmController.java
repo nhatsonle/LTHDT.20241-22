@@ -1,8 +1,11 @@
 package controller;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,8 +14,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.control.*;
 import model.*;
 import model.Process;
@@ -47,7 +54,7 @@ public class AlgorithmController implements Initializable {
 	@FXML
     private Button runButton;
 	
-	private ObservableList<Process> processList;
+	private ObservableList<Process> processList = FXCollections.observableArrayList();
    
     @FXML
     private TableColumn<Process, Integer> colID;
@@ -65,6 +72,16 @@ public class AlgorithmController implements Initializable {
     private Label avgTurnAroundTime;
     @FXML
     private Label avgWaitTime;
+    
+    @FXML
+    private Canvas ganttCanvas;
+    
+    @FXML
+    private Label timeLabel;
+    
+    private double currentTime = 0;
+    
+    
     
 
 	private Stage stage;
@@ -105,7 +122,6 @@ public class AlgorithmController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
     	// Init table processes 
-    	processList = FXCollections.observableArrayList();
 		idColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("id"));
 		arrivalTimeColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("arrivalTime"));
 		burstTimeColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("burstTime"));
@@ -331,16 +347,16 @@ public class AlgorithmController implements Initializable {
  	{
  		CPUAlgorithm fcfs = new FCFS();
  		fcfs.schedule(processList);
- 		avgTurnAroundTime.setText(Double.toString(fcfs.getAvgWaitingTime()) + " s");
-        avgWaitTime.setText(Double.toString(fcfs.getAvgTurnAroundTime()) + " s");
+ 		avgTurnAroundTime.setText(Double.toString(fcfs.getAvgTurnAroundTime()) + " s");
+        avgWaitTime.setText(Double.toString(fcfs.getAvgWaitingTime()) + " s");
  	}
 
  	void runSJN()
  	{
  		CPUAlgorithm sjn = new SJN();
  		sjn.schedule(processList);
- 		avgTurnAroundTime.setText(Double.toString(sjn.getAvgWaitingTime()) + " s");
-        avgWaitTime.setText(Double.toString(sjn.getAvgTurnAroundTime()) + " s");
+ 		avgTurnAroundTime.setText(Double.toString(sjn.getAvgTurnAroundTime()) + " s");
+        avgWaitTime.setText(Double.toString(sjn.getAvgWaitingTime()) + " s");
  	}
  	
  	void runRR() {
@@ -351,8 +367,61 @@ public class AlgorithmController implements Initializable {
 			rr = new RoundRobin();
 		}
 		rr.schedule(processList);
-		avgTurnAroundTime.setText(Double.toString(rr.getAvgWaitingTime()) + " s");
-        avgWaitTime.setText(Double.toString(rr.getAvgTurnAroundTime()) + " s");
+		avgTurnAroundTime.setText(Double.toString(rr.getAvgTurnAroundTime()) + " s");
+        avgWaitTime.setText(Double.toString(rr.getAvgWaitingTime()) + " s");
+ 	}
+ 	
+ 	@FXML
+ 	public void startGanttChartAnimation(ObservableList<Process> processes)
+ 	{
+ 		GraphicsContext gc = ganttCanvas.getGraphicsContext2D();
+ 		double unitTime = 1000;
+ 		double unitWidth = ganttCanvas.getWidth() / totalBurstTime(processes);
+ 		double unitHeight = ganttCanvas.getHeight() / processList.size();
+ 		
+ 		Timeline timeline = new Timeline();
+ 		timeline.setCycleCount(Timeline.INDEFINITE);
+ 		
+ 		timeline.getKeyFrames().add(new KeyFrame(Duration.millis(unitTime), event -> {
+ 			currentTime++;
+            System.out.println("Current Time: " + currentTime + "s"); // Debugging statement
+ 			timeLabel.setText(currentTime + "s");
+ 			drawGanttChart(gc, processes, currentTime, unitWidth, unitHeight);
+ 		}));
+ 		
+ 		timeline.play();
  	}
 
+ 	
+ 	private void drawGanttChart(GraphicsContext gc,ObservableList<Process> processes, double currentTime, double unitWidth, double unitHeight)
+ 	{
+ 		gc.clearRect(0, 0, ganttCanvas.getWidth(), ganttCanvas.getHeight());
+ 		System.out.println("Drawing Gantt Chart"); // Debugging statement
+ 		
+ 		for(Process process : processes)
+ 		{
+ 			double startTime = Math.max(currentTime, process.getArrivalTime());
+ 			double finishTime = startTime + process.getBurstTime();
+ 			double startX = startTime * unitWidth;
+ 			double width = process.getBurstTime() * unitWidth;
+ 			double height = unitHeight;
+ 			double yPos = process.getId() * unitHeight;
+ 			
+ 			gc.setFill(getProcessColor(process.getId()));
+ 			gc.fillRect(startX, yPos, width, height);
+ 			gc.setStroke(Color.BLACK);
+ 			gc.strokeRect(startX, yPos, width, height);
+ 			System.out.println("Process " + process.getId() + ": startX=" + startX + ", width=" + width); // Debugging statement
+ 		}
+ 	}
+ 	
+ 	private double totalBurstTime(ObservableList<Process> processes)
+ 	{
+ 		return processes.stream().mapToDouble(Process::getBurstTime).sum();
+ 	}
+ 	
+ 	private Color getProcessColor(int pid)
+ 	{
+ 		return Color.hsb((pid * 360.0 / 10) % 360, 0.7, 0.9);
+ 	}
 }
