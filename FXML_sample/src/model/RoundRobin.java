@@ -7,7 +7,7 @@ import java.util.Queue;
 
 public class RoundRobin extends CPUAlgorithm {
 	
-	private int timeQuantum;
+	private int timeQuantum = 0;
 	public RoundRobin() {
 		this.setName("Round Robin");
 		this.timeQuantum = 90;
@@ -94,6 +94,7 @@ public class RoundRobin extends CPUAlgorithm {
         System.out.println("---------------------------------------------------------------");
         System.out.printf("Thời gian chờ trung bình: %.2f%n", avgWaitingTime);
         System.out.printf("Thời gian quay vòng trung bình: %.2f%n", avgTurnAroundTime);
+        System.out.println("Thời gian lượng tử là: " + timeQuantum);
 	}
 	
 	@Override

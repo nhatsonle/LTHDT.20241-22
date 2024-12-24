@@ -8,7 +8,7 @@ public class SharedData {
     private static Object currentAlgorithm;
     private static SharedData instance = new SharedData();
     private static ObservableList<Process> processes = FXCollections.observableArrayList();
-    private static double avgWT, avgTRT;
+    public static double avgWT, avgTRT;
     
     public static void setWT(double avgwt)
     {

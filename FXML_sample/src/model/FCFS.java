@@ -7,6 +7,7 @@ public class FCFS extends CPUAlgorithm {
 	public FCFS() {
 		this.setName("FCFS");
 	}
+	
 	public void schedule(List<Process> processes) {
 		// Sắp xếp tiến trình theo thời gian đến || thời gian thực hiện || priority
 		processes.sort((p1, p2) -> {
@@ -45,6 +46,7 @@ public class FCFS extends CPUAlgorithm {
 		System.out.println("-------------------------------------------------------------");
         System.out.printf("Thời gian chờ trung bình: %.2f%n", avgWaitingTime);
         System.out.printf("Thời gian quay vòng trung bình: %.2f%n", avgTurnAroundTime);
+
 	}
 	
 	@Override

@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import application.Main;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -44,27 +46,13 @@ public class AlgorithmController implements Initializable {
 
     @FXML
     private Label avgWaitTime;
-
-    
-
-	private Stage stage;
-	// Set the primaryStage in the controller
-    public void setPrimaryStage(Stage stage) {
-        this.stage = stage;
-    }
     
     @FXML
-    void backToMainPage() throws IOException {
-    	if (this.stage == null) {
-            throw new IllegalStateException("Stage is not initialized");
-        }
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/landingPage.fxml"));
-        Parent root = loader.load();
-        
-        LandingPageController controller = loader.getController();
-        controller.setPrimaryStage(stage);
-        Scene scene = new Scene(root, 800, 600);
-        stage.setScene(scene);        
+    private MenuItem helpMenuItem;
+    
+    @FXML
+    void backToMainPage(ActionEvent event) {
+    	new Main();       
     }
     
     @Override
@@ -95,6 +83,10 @@ public class AlgorithmController implements Initializable {
         avgTurnAroundTime.setText(Double.toString(SharedData.getTRT()) + " s");
         avgWaitTime.setText(Double.toString(SharedData.getWT()) + " s");
         
+    }
+    @FXML
+    void handleHelp(ActionEvent event) {
+
     }
     
 
