@@ -16,13 +16,12 @@ public class Main extends Application {
 	    Parent root = loader.load();
 
 	    FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/view/sample.fxml"));
-	    Parent algorithmRoot = loader2.load(); // Bắt buộc phải load để gắn controller
+	    Parent algorithmRoot = loader2.load(); 
 
 	    AlgorithmController algorithmController = loader2.getController();
 
 	    // Truyền stage và controller
 	    LandingPageController controller = loader.getController();
-	    controller.setSamplePage(algorithmController);
 	    controller.setPrimaryStage(primaryStage);
 
 	    Scene scene = new Scene(root, 800, 600);

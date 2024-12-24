@@ -29,6 +29,7 @@ public class FCFS extends CPUAlgorithm {
         System.out.println("-------------------------------------------------------------");
 		for(Process process: processes) {
 			// Xử lý tiến trình
+			currentTime = Math.max(currentTime, process.getArrivalTime());
 			// Trả waiting time cho process
 			process.calculateWaitingTime(currentTime);
 			// Trả turn around time cho process
@@ -39,7 +40,7 @@ public class FCFS extends CPUAlgorithm {
 	        int turnaroundTime = process.getTurnaroundTime();
 			totalWaitingTime += waitingTime;
 			totalTurnAroundTime += turnaroundTime;
-			currentTime = Math.max(currentTime, process.getArrivalTime()) + process.getBurstTime();	
+			currentTime +=  process.getBurstTime();	
 			System.out.printf("    P%d     |      %d      |     %d     |      %d      |       %d%n", process.getId(), process.getArrivalTime(), process.getBurstTime(), process.getWaitingTime(), process.getTurnaroundTime());
 		}
 		int n = processes.size();

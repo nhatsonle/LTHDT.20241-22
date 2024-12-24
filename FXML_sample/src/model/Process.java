@@ -37,7 +37,7 @@ public class Process {
 	}
 	// Tính thời gian quay vòng
 	public void calculateTurnaroundTime() {
-		this.turnaroundTime = waitingTime + burstTime;
+		this.turnaroundTime = this.waitingTime + burstTime;
 	}
 	public int getId() {
 		return id;

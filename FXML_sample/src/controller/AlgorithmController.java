@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.*;
 import model.*;
 import model.Process;
+import view.HelpView;
 public class AlgorithmController implements Initializable {
 	private String nameAlgorithm;
 	@FXML
@@ -47,7 +48,7 @@ public class AlgorithmController implements Initializable {
 	@FXML
     private Button runButton;
 	
-	private ObservableList<Process> processList;
+	private ObservableList<Process> processList = FXCollections.observableArrayList();
    
     @FXML
     private TableColumn<Process, Integer> colID;
@@ -87,10 +88,15 @@ public class AlgorithmController implements Initializable {
         stage.setScene(scene);        
     }
     
+    @FXML
+    void handleHelp() {
+    	HelpView helpView = new HelpView();
+    	helpView.showHelp();
+    }
+    
     // set title cho trang algorithm
     void setTitle(String name) {
     	this.nameAlgorithm = name;
-    	System.out.println("Hello " + this.nameAlgorithm);
     	if (algorithmLabel != null) {
             algorithmLabel.setText("Thuật toán: " + name);
         } else {
@@ -101,11 +107,11 @@ public class AlgorithmController implements Initializable {
     public String getNameAlgorithm() {
     	return this.nameAlgorithm;
     }
-    	
+    
+    // Init cho trang
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
     	// Init table processes 
-    	processList = FXCollections.observableArrayList();
 		idColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("id"));
 		arrivalTimeColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("arrivalTime"));
 		burstTimeColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("burstTime"));
@@ -119,16 +125,7 @@ public class AlgorithmController implements Initializable {
 		tableProcesses.setItems(processList);
 		updateEdit.setVisible(false);
 		
-		
-        // Lấy thuật toán hiện tại từ SharedData và cập nhật label
-    	System.out.println("1");
-    	System.out.println(this.nameAlgorithm);
-            if (this.nameAlgorithm != null) {
-                algorithmLabel.setText("Thuật toán: " + this.nameAlgorithm);
-            } else {
-                algorithmLabel.setText("Chưa chọn thuật toán!");
-            }
-            
+   
         // Table live output
         colID.setCellValueFactory(new PropertyValueFactory<Process, Integer>("id"));
         colArrival.setCellValueFactory(new PropertyValueFactory<Process, Integer>("arrivalTime"));
@@ -142,7 +139,6 @@ public class AlgorithmController implements Initializable {
         colBurst.setStyle("-fx-alignment: CENTER;");
         colTurnaround.setStyle("-fx-alignment: CENTER;");
         colWaiting.setStyle("-fx-alignment: CENTER;");
-       
         tblOutput.setItems(processList);
         
         // Bảng đánh giá CPU
@@ -254,7 +250,7 @@ public class AlgorithmController implements Initializable {
  	            selectedProcess.setPriority(Integer.parseInt(priorityText.getText()));
  	            
  	            // refresh lại bảng
- 	           tableProcesses.refresh();
+ 	            tableProcesses.refresh();
  	            
  	            //clear
  	            idText.clear();
@@ -331,28 +327,33 @@ public class AlgorithmController implements Initializable {
  	{
  		CPUAlgorithm fcfs = new FCFS();
  		fcfs.schedule(processList);
- 		avgTurnAroundTime.setText(Double.toString(fcfs.getAvgWaitingTime()) + " s");
-        avgWaitTime.setText(Double.toString(fcfs.getAvgTurnAroundTime()) + " s");
+ 		tblOutput.refresh();
+ 		avgWaitTime.setText(Double.toString(fcfs.getAvgWaitingTime()) + " s");
+ 		avgTurnAroundTime.setText(Double.toString(fcfs.getAvgTurnAroundTime()) + " s");
  	}
 
  	void runSJN()
  	{
  		CPUAlgorithm sjn = new SJN();
  		sjn.schedule(processList);
- 		avgTurnAroundTime.setText(Double.toString(sjn.getAvgWaitingTime()) + " s");
-        avgWaitTime.setText(Double.toString(sjn.getAvgTurnAroundTime()) + " s");
+ 		tblOutput.refresh();
+ 		avgWaitTime.setText(Double.toString(sjn.getAvgWaitingTime()) + " s");
+ 		avgTurnAroundTime.setText(Double.toString(sjn.getAvgTurnAroundTime()) + " s");
  	}
  	
  	void runRR() {
- 		RoundRobin rr;
+ 		int getQuantumTime;
 		if(timeQuantumText.getText() != null && !timeQuantumText.getText().isEmpty()) {
-			rr = new RoundRobin(Integer.parseInt(timeQuantumText.getText()));
+			getQuantumTime = Integer.parseInt(timeQuantumText.getText());
 		} else {
-			rr = new RoundRobin();
+			// default value quantum time
+			getQuantumTime = 90;
 		}
+		CPUAlgorithm rr = new RoundRobin(getQuantumTime);
 		rr.schedule(processList);
-		avgTurnAroundTime.setText(Double.toString(rr.getAvgWaitingTime()) + " s");
-        avgWaitTime.setText(Double.toString(rr.getAvgTurnAroundTime()) + " s");
+		tblOutput.refresh();
+		avgWaitTime.setText(Double.toString(rr.getAvgWaitingTime()) + " s");
+		avgTurnAroundTime.setText(Double.toString(rr.getAvgTurnAroundTime()) + " s");
  	}
 
 }
