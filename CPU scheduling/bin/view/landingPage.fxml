@@ -25,13 +25,13 @@
          <children>
             <MenuButton alignment="CENTER" prefHeight="36.0" prefWidth="250" style="-fx-font-size: 14;" text="CPU Algorithms" textAlignment="CENTER">
                <items>
-                  <MenuItem fx:id="fcfsMenu"  styleClass="menu-item" text="FIRST COME FIRST SERVE (FCFS)" />
-                  <MenuItem fx:id="sjnMenu"  styleClass="menu-item" text="SHORTEST JOB NEXT (SJN)" />
-                  <MenuItem fx:id="rrMenu"  styleClass="menu-item" text="ROUND ROBIN (RR)" />
+                  <MenuItem fx:id="fcfsMenu" styleClass="menu-item" text="FIRST COME FIRST SERVE (FCFS)" />
+                  <MenuItem fx:id="sjnMenu" styleClass="menu-item" text="SHORTEST JOB NEXT (SJN)" />
+                  <MenuItem fx:id="rrMenu" styleClass="menu-item" text="ROUND ROBIN (RR)" />
                </items>
             </MenuButton>
-            <Button prefHeight="36.0" prefWidth="250" style="-fx-font-size: 14;" text="Help" fx:id="helpMenuItem" onAction="#handleHelp" />
-            <Button prefHeight="36.0" prefWidth="250.0" style="-fx-font-size: 14;" text="Exit" onAction="#handleExit" />
+            <Button fx:id="helpMenuItem" onAction="#handleHelp" prefHeight="36.0" prefWidth="250" style="-fx-font-size: 14;" text="Help" />
+            <Button onAction="#handleExit" prefHeight="36.0" prefWidth="250.0" style="-fx-font-size: 14;" text="Quit" />
          </children>
          <padding>
             <Insets top="20" />

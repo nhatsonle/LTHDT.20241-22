@@ -79,6 +79,8 @@ public class AlgorithmController implements Initializable {
     private Label avgTurnAroundTime;
     @FXML
     private Label avgWaitTime;
+    @FXML
+    private Label cpuUtilization;
     
     @FXML
     private Canvas ganttCanvas;
@@ -134,6 +136,10 @@ public class AlgorithmController implements Initializable {
     // Init cho trang
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+    	//Init 3 process
+    	processList.add(new Process(1, 0, 80, 1));
+    	processList.add(new Process(2, 20, 60, 2));
+    	processList.add(new Process(3, 40, 65, 3));
     	// Init table processes 
 		idColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("id"));
 		arrivalTimeColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("arrivalTime"));
@@ -164,9 +170,6 @@ public class AlgorithmController implements Initializable {
         colWaiting.setStyle("-fx-alignment: CENTER;");
         tblOutput.setItems(processList);
         
-        // Bảng đánh giá CPU
-        avgTurnAroundTime.setText("0 s");
-        avgWaitTime.setText("0 s");
     }
     
     
@@ -351,8 +354,9 @@ public class AlgorithmController implements Initializable {
  		CPUAlgorithm fcfs = new FCFS();
  		fcfs.schedule(processList);
  		tblOutput.refresh();
- 		avgWaitTime.setText(df.format(fcfs.getAvgWaitingTime()) + " s");
- 		avgTurnAroundTime.setText(df.format(fcfs.getAvgTurnAroundTime()) + " s");
+ 		avgWaitTime.setText(String.format("%.2f s", fcfs.getAvgWaitingTime()));
+ 	    avgTurnAroundTime.setText(String.format("%.2f s", fcfs.getAvgTurnAroundTime()));
+ 	    cpuUtilization.setText(String.format("%.2f %%", fcfs.getCpuUtilization()));
  	}
 
  	void runSJN()
@@ -360,23 +364,47 @@ public class AlgorithmController implements Initializable {
  		CPUAlgorithm sjn = new SJN();
  		sjn.schedule(processList);
  		tblOutput.refresh();
- 		avgWaitTime.setText(df.format(sjn.getAvgWaitingTime()) + " s");
- 		avgTurnAroundTime.setText(df.format(sjn.getAvgTurnAroundTime()) + " s");
+ 		avgWaitTime.setText(String.format("%.2f s", sjn.getAvgWaitingTime()));
+ 	    avgTurnAroundTime.setText(String.format("%.2f s", sjn.getAvgTurnAroundTime()));
+ 	    cpuUtilization.setText(String.format("%.2f %%", sjn.getCpuUtilization()));
  	}
  	
  	void runRR() {
- 		int getQuantumTime;
- 		if(timeQuantumText.getText() != null && !timeQuantumText.getText().isEmpty()) {
- 			getQuantumTime = Integer.parseInt(timeQuantumText.getText());
- 		} else {
- 			// default value quantum time
- 			getQuantumTime = 90;
+ 		try {
+ 			int getQuantumTime;
+ 			if(timeQuantumText.getText() != null && !timeQuantumText.getText().isEmpty()) {
+ 				getQuantumTime = Integer.parseInt(timeQuantumText.getText());
+ 			} else {
+ 				// default value quantum time
+ 				getQuantumTime = 90;
+ 			}
+ 			if(getQuantumTime < 0) {
+ 				Alert alert = new Alert(Alert.AlertType.WARNING);
+ 	            alert.setTitle("Cảnh báo");
+ 	            alert.setHeaderText("Dữ liệu không hợp lệ");
+ 	            alert.setContentText("Không được nhập giá trị âm cho Time Quantum!");
+ 	            alert.showAndWait();
+ 	            return;
+ 			}
+ 			CPUAlgorithm rr = new RoundRobin(getQuantumTime);
+ 			rr.schedule(processList);
+ 			// Cập nhật lại bảng live output
+ 			tblOutput.refresh();
+ 			// Set giá trị cho bảng đánh giá CPU
+ 			System.out.println(getQuantumTime);
+ 			avgWaitTime.setText(String.format("%.2f s", rr.getAvgWaitingTime()));
+ 		    avgTurnAroundTime.setText(String.format("%.2f s", rr.getAvgTurnAroundTime())); 
+ 		   cpuUtilization.setText(String.format("%.2f %%", rr.getCpuUtilization()));
  		}
-		CPUAlgorithm rr = new RoundRobin(getQuantumTime);
-		rr.schedule(processList);
-		tblOutput.refresh();
-		avgWaitTime.setText(df.format(rr.getAvgWaitingTime()) + " s");
-		avgTurnAroundTime.setText(df.format(rr.getAvgTurnAroundTime()) + " s");
+ 		
+	    catch (NumberFormatException ex) {
+ 			// Lỗi nhập không phải số
+ 			Alert alert = new Alert(Alert.AlertType.ERROR);
+ 	        alert.setTitle("Lỗi nhập liệu");
+ 	        alert.setHeaderText("Dữ liệu không hợp lệ");
+ 	        alert.setContentText("Vui lòng nhập số nguyên cho Time Quantum!");
+ 	        alert.showAndWait();
+ 		}
  	}
  	
  	@FXML

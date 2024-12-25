@@ -27,8 +27,6 @@ public class GanttChartSchedule {
         }
 	}
 	
-
-	
 	private void drawGanttChartCell(Process p, double totalTime, HBox ganttChart, boolean last, Scene scene, double timer) {
         VBox v = new VBox();
         v.setAlignment(Pos.CENTER);
@@ -94,7 +92,7 @@ public class GanttChartSchedule {
                 processes.get(i).setFinishTime(timer + processes.get(i).getBurstTime());
                 processes.get(i).setWaitingTime(timer - processes.get(i).getArrivalTime());
                
-                gantt.addCell(new GanttChartCell(timer, -1,Integer.toString(arrivedProcesses.get(0).getId())));
+                gantt.addCell(new GanttChartCell(timer, -1,"P" +Integer.toString(arrivedProcesses.get(0).getId())));
                 arrivedProcesses.remove(0);
                 timer += processes.get(i).getBurstTime();
                 i++;
@@ -111,7 +109,7 @@ public class GanttChartSchedule {
             }
 
         }
-        gantt.addCell(new GanttChartCell(timer, -1,Integer.toString(processes.get(i-1).getId())));
+        gantt.addCell(new GanttChartCell(timer, -1,"P" +Integer.toString(processes.get(i-1).getId())));
 
         gantt.draw(ganttChart, scene);
     }
@@ -150,7 +148,7 @@ public class GanttChartSchedule {
             nextProcess.setWaitingTime(timer - nextProcess.getArrivalTime());
             nextProcess.setRemainingTime(0);
 
-            gantt.addCell(new GanttChartCell(timer, -1, Integer.toString(nextProcess.getId())));
+            gantt.addCell(new GanttChartCell(timer, -1,"P" + Integer.toString(nextProcess.getId())));
             arrivedProcesses.remove(nextProcess);
 
             timer += nextProcess.getBurstTime();
@@ -173,7 +171,7 @@ public class GanttChartSchedule {
             }
 
         }
-        gantt.addCell(new GanttChartCell(timer, -1, Integer.toString(nextProcess.getId())));
+        gantt.addCell(new GanttChartCell(timer, -1,"P" + Integer.toString(nextProcess.getId())));
         gantt.draw(ganttChart, scene);
     }
         
@@ -220,7 +218,7 @@ public class GanttChartSchedule {
 
                 if (timeQuantum >= nextProcess.getRemainingTime()) {
                     timer += nextProcess.getRemainingTime();
-                    gantt.addCell(new GanttChartCell(timer-nextProcess.getRemainingTime(), -1, Integer.toString(nextProcess.getId())));
+                    gantt.addCell(new GanttChartCell(timer-nextProcess.getRemainingTime(), -1,"P" + Integer.toString(nextProcess.getId())));
                     nextProcess.setRemainingTime(0);
                     arrivedProcesses.remove(nextProcess);
                     finished++;
@@ -234,7 +232,7 @@ public class GanttChartSchedule {
                 } else {
                     timer += timeQuantum;
                     nextProcess.setRemainingTime(nextProcess.getRemainingTime() - timeQuantum);
-                    gantt.addCell(new GanttChartCell(timer-timeQuantum, -1, Integer.toString(nextProcess.getId())));
+                    gantt.addCell(new GanttChartCell(timer-timeQuantum, -1,"P" + Integer.toString(nextProcess.getId())));
                 }
 
             }
@@ -286,7 +284,7 @@ public class GanttChartSchedule {
             tempProcesses.clear();
         }
         nextProcess.setFinishTime(timer);
-        gantt.addCell(new GanttChartCell(timer, -1, Integer.toString(nextProcess.getId())));
+        gantt.addCell(new GanttChartCell(timer, -1,"P" + Integer.toString(nextProcess.getId())));
         gantt.drawWithDuplicates(ganttChart, scene);
         for (int i = 0; i < processes.size(); i++) {
             P.get(P.indexOf(processes.get(i))).setStartingTime(processes.get(i).getStartingTime());
