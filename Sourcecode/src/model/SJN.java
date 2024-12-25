@@ -74,20 +74,25 @@ public class SJN extends CPUAlgorithm {
         
         }
 	@Override
-	public String displayHelp() {
-	    return """
-	    Thuật toán Shortest Job First (SJN):
-	    - SJN là thuật toán lập lịch dựa trên thời gian xử lý ngắn nhất.
-	    - Tiến trình có Burst Time ngắn nhất sẽ được ưu tiên thực thi trước.
-	    - Nếu có tiến trình đến cùng lúc, thì sắp xếp dựa trên thứ tự Arrival Time.
-	    - Có hai loại: Non-Preemptive (không gián đoạn) và Preemptive (gián đoạn).
-	    
-	    Ưu điểm:
-	    - Giảm thời gian chờ đợi trung bình.
-	    Nhược điểm:
-	    - Dễ dẫn đến Starvation (tiến trình dài bị bỏ qua).
-	    """;
+	public String displayHelp()
+	{
+		return "Giải thích của thuật toán Shortest Job Next";
 	}
+//	@Override
+//	public String displayHelp() {
+//	    return """
+//	    Thuật toán Shortest Job First (SJN):
+//	    - SJN là thuật toán lập lịch dựa trên thời gian xử lý ngắn nhất.
+//	    - Tiến trình có Burst Time ngắn nhất sẽ được ưu tiên thực thi trước.
+//	    - Nếu có tiến trình đến cùng lúc, thì sắp xếp dựa trên thứ tự Arrival Time.
+//	    - Có hai loại: Non-Preemptive (không gián đoạn) và Preemptive (gián đoạn).
+//	    
+//	    Ưu điểm:
+//	    - Giảm thời gian chờ đợi trung bình.
+//	    Nhược điểm:
+//	    - Dễ dẫn đến Starvation (tiến trình dài bị bỏ qua).
+//	    """;
+//	}
 	
 	
 }
