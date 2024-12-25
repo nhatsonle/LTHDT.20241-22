@@ -17,13 +17,11 @@ public class SJN extends CPUAlgorithm {
 		int currentTime = 0;
         int totalWaitingTime = 0;
         int totalTurnaroundTime = 0;
-        System.out.println("Tiến trình | Arrival Time | Burst Time | Waiting Time | Turnaround Time");
-        System.out.println("-------------------------------------------------------------");
         while(!readyQueue.isEmpty()) {
-        	// Tạo danh sách tiến trình đã đến
-        	// Với mỗi lần 
+        	// Tạo danh sách mới tiến trình đã đến
         	List<Process> availableProcesses = new ArrayList<>();
             for (Process p : readyQueue) {
+            	// Với mỗi lần tiến trình đến thêm vào hàng đợi
                 if (p.getArrivalTime() <= currentTime) {
                     availableProcesses.add(p);
                 }
@@ -38,7 +36,7 @@ public class SJN extends CPUAlgorithm {
                 continue;
             }
             
-         // Chọn tiến trình có Burst Time nhỏ nhất; nếu trùng thì dựa trên Priority
+            // Chọn tiến trình có Burst Time nhỏ nhất; nếu trùng thì dựa trên Priority
             Process selectedProcess = availableProcesses.stream()
                     .min((p1, p2) -> {
                         if (p1.getBurstTime() != p2.getBurstTime()) {
@@ -49,34 +47,26 @@ public class SJN extends CPUAlgorithm {
                     })
                     .orElse(null);
             
-            
             // Xử lý tiến trình
-            // Trả waiting time cho process
+            // Tính waiting time cho process
             selectedProcess.calculateWaitingTime(currentTime);
-            // Trả turn around time cho process
+            // Tính turn around time cho process
             selectedProcess.calculateTurnaroundTime();
 
-            
             int waitingTime = selectedProcess.getWaitingTime();
             int turnaroundTime = selectedProcess.getTurnaroundTime();
             totalWaitingTime += waitingTime;
             totalTurnaroundTime += turnaroundTime;
 
-            System.out.printf("    P%d     |      %d      |     %d     |      %d      |       %d%n",
-                    selectedProcess.getId(), selectedProcess.getArrivalTime(),
-                    selectedProcess.getBurstTime(), waitingTime, turnaroundTime);
-
-            // Cập nhật thời gian hiện tại và loại bỏ tiến trình đã xử lý khỏi hàng đợi
+            // Cập nhật thời gian hiện tại
             currentTime += selectedProcess.getBurstTime();
+            // Xóa tiến trình đã thực thi
             readyQueue.remove(selectedProcess);
         }
 
         int n = processes.size();
-        avgWaitingTime = (double)totalWaitingTime / n;
-        avgTurnAroundTime = (double)totalTurnaroundTime / n;
-        System.out.println("-------------------------------------------------------------");
-        System.out.printf("Thời gian chờ trung bình: %.2f%n", avgWaitingTime);
-        System.out.printf("Thời gian quay vòng trung bình: %.2f%n", avgTurnAroundTime);
+        this.avgWaitingTime = (double)totalWaitingTime / n;
+        this.avgTurnAroundTime = (double)totalTurnaroundTime / n;
         
         }
 	@Override

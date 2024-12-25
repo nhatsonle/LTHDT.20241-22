@@ -1,11 +1,8 @@
 package model;
 
-import java.util.List;
-
 import javafx.collections.ObservableList;
 
 public class FCFS extends CPUAlgorithm {
-	
 	public FCFS() {
 		this.setName("FCFS");
 	}
@@ -25,14 +22,14 @@ public class FCFS extends CPUAlgorithm {
 		int currentTime = 0;
 		int totalWaitingTime = 0; // Tổng thời gian chờ
 		int totalTurnAroundTime = 0; // Tổng thời gian quay vòng
-		System.out.println("Tiến trình | Arrival Time | Burst Time | Waiting Time | Turnaround Time");
-        System.out.println("-------------------------------------------------------------");
+		
 		for(Process process: processes) {
-			// Xử lý tiến trình
+			// Nếu currentTime < process.getArrivalTime()
 			currentTime = Math.max(currentTime, process.getArrivalTime());
-			// Trả waiting time cho process
+			
+			// Tính waiting time cho process
 			process.calculateWaitingTime(currentTime);
-			// Trả turn around time cho process
+			// Tính turn around time cho process
 			process.calculateTurnaroundTime();
 			
 			// Xử lý tính WAT và TAT
@@ -41,14 +38,10 @@ public class FCFS extends CPUAlgorithm {
 			totalWaitingTime += waitingTime;
 			totalTurnAroundTime += turnaroundTime;
 			currentTime +=  process.getBurstTime();	
-			System.out.printf("    P%d     |      %d      |     %d     |      %d      |       %d%n", process.getId(), process.getArrivalTime(), process.getBurstTime(), process.getWaitingTime(), process.getTurnaroundTime());
 		}
 		int n = processes.size();
-		avgWaitingTime = (double)totalWaitingTime / n;
-        avgTurnAroundTime = (double)totalTurnAroundTime / n;
-		System.out.println("-------------------------------------------------------------");
-        System.out.printf("Thời gian chờ trung bình: %.2f%n", avgWaitingTime);
-        System.out.printf("Thời gian quay vòng trung bình: %.2f%n", avgTurnAroundTime);
+		this.avgWaitingTime = (double)totalWaitingTime / n;
+        this.avgTurnAroundTime = (double)totalTurnAroundTime / n;
 	}
 	
 	@Override

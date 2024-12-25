@@ -1,6 +1,5 @@
 package application;
-	
-import controller.AlgorithmController;
+
 import controller.LandingPageController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,11 +14,6 @@ public class Main extends Application {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/landingPage.fxml"));
 	    Parent root = loader.load();
 
-	    FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/view/sample.fxml"));
-	    Parent algorithmRoot = loader2.load(); 
-
-	    AlgorithmController algorithmController = loader2.getController();
-
 	    // Truyền stage và controller
 	    LandingPageController controller = loader.getController();
 	    controller.setPrimaryStage(primaryStage);
@@ -29,7 +23,6 @@ public class Main extends Application {
 	    primaryStage.setScene(scene);
 	    primaryStage.show();
 	}
-	
 	
 	public static void main(String[] args) {
 		launch(args);

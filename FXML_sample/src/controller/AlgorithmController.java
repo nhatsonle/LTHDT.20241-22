@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,8 +13,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.control.*;
 import model.*;
 import model.Process;
@@ -33,6 +39,7 @@ public class AlgorithmController implements Initializable {
 	private TableColumn<Process, Integer> burstTimeColumn;
 	@FXML
 	private TableColumn<Process, Integer> priorityColumn;
+	// Field update table view process
 	@FXML
 	private TextField idText;
 	@FXML
@@ -48,8 +55,19 @@ public class AlgorithmController implements Initializable {
 	@FXML
     private Button runButton;
 	
+	// Gantt chart
+	@FXML
+    private Canvas ganttCanvas;
+    @FXML
+    private Label timeLabel;
+    private double currentTime = 0;
+	
+	// Tạo danh sách process
 	private ObservableList<Process> processList = FXCollections.observableArrayList();
-   
+	
+	// Table live output
+	@FXML
+    private TableView<Process> tblOutput;
     @FXML
     private TableColumn<Process, Integer> colID;
     @FXML
@@ -60,20 +78,20 @@ public class AlgorithmController implements Initializable {
     private TableColumn<Process, Integer> colTurnaround;
     @FXML
     private TableColumn<Process, Integer> colWaiting;
-    @FXML
-    private TableView<Process> tblOutput;
+  
+    // Table Scheduling Metrics
     @FXML
     private Label avgTurnAroundTime;
     @FXML
     private Label avgWaitTime;
     
-
 	private Stage stage;
 	// Set the primaryStage in the controller
     public void setPrimaryStage(Stage stage) {
         this.stage = stage;
     }
     
+    // Back to main page
     @FXML
     void backToMainPage() throws IOException {
     	if (this.stage == null) {
@@ -88,13 +106,14 @@ public class AlgorithmController implements Initializable {
         stage.setScene(scene);        
     }
     
+    // Show help
     @FXML
     void handleHelp() {
     	HelpView helpView = new HelpView();
     	helpView.showHelp();
     }
     
-    // set title cho trang algorithm
+    // Set title cho trang algorithm
     void setTitle(String name) {
     	this.nameAlgorithm = name;
     	if (algorithmLabel != null) {
@@ -104,13 +123,16 @@ public class AlgorithmController implements Initializable {
         }
     }
     
-    public String getNameAlgorithm() {
-    	return this.nameAlgorithm;
-    }
     
-    // Init cho trang
+    // Init cho trang 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+    	// Tạo danh sách mới processes
+    	processList.add(new Process(1, 0, 8, 1));
+    	processList.add(new Process(2, 2, 6, 2));
+    	processList.add(new Process(3, 4, 6, 3));
+    	processList.add(new Process(4, 6, 12, 4));
+    	processList.add(new Process(5, 8, 3, 5));
     	// Init table processes 
 		idColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("id"));
 		arrivalTimeColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("arrivalTime"));
@@ -147,14 +169,28 @@ public class AlgorithmController implements Initializable {
     }
     
     
- // Thêm process
+    // Thêm process
  	public void addProcess(ActionEvent e) {
  		Process newProcess = new Process();
  		try {
- 			newProcess.setId(Integer.parseInt(idText.getText()));
- 			newProcess.setArrivalTime(Integer.parseInt(arrivalTimeText.getText()));
- 			newProcess.setBurstTime(Integer.parseInt(burstTimeText.getText()));
- 			newProcess.setPriority(Integer.parseInt(priorityText.getText()));
+ 			int newId = Integer.parseInt(idText.getText());
+ 	        int newArrivalTime = Integer.parseInt(arrivalTimeText.getText());
+ 	        int newBurstTime = Integer.parseInt(burstTimeText.getText());
+ 	        int newPriority = Integer.parseInt(priorityText.getText());
+ 			
+ 			if (newId < 0 || newArrivalTime < 0 || newBurstTime < 0 || newPriority < 0) {
+ 	            Alert alert = new Alert(Alert.AlertType.WARNING);
+ 	            alert.setTitle("Cảnh báo");
+ 	            alert.setHeaderText("Dữ liệu không hợp lệ");
+ 	            alert.setContentText("Không được nhập giá trị âm cho các trường dữ liệu!");
+ 	            alert.showAndWait();
+ 	            return;
+ 	        }
+ 			
+ 			newProcess.setId(newId);
+ 	        newProcess.setArrivalTime(newArrivalTime);
+ 	        newProcess.setBurstTime(newBurstTime);
+ 	        newProcess.setPriority(newPriority);
  			
  			if(processList.contains(newProcess)) {
  				// Id trùng nhau
@@ -172,6 +208,7 @@ public class AlgorithmController implements Initializable {
  	        burstTimeText.clear();
  	        priorityText.clear();
  		} catch (NumberFormatException ex) {
+ 			// Lỗi nhập không phải số
  			Alert alert = new Alert(Alert.AlertType.ERROR);
  	        alert.setTitle("Lỗi nhập liệu");
  	        alert.setHeaderText("Dữ liệu không hợp lệ");
@@ -185,11 +222,10 @@ public class AlgorithmController implements Initializable {
  	    try {
  	        // Lấy process được chọn trong TableView
  	        Process removedProcess = tableProcesses.getSelectionModel().getSelectedItem();
-
  	        if (removedProcess != null) {
  	            processList.remove(removedProcess);
  	        } else {
- 	            // Hiển thị cảnh báo nếu không có process nào được chọn
+ 	            // Hiện thị khi chưa chọn process nào
  	            Alert alert = new Alert(Alert.AlertType.WARNING);
  	            alert.setTitle("Cảnh báo");
  	            alert.setHeaderText("Không có mục nào được chọn");
@@ -208,17 +244,17 @@ public class AlgorithmController implements Initializable {
  	
  	public void editProcess(ActionEvent e) {
  	    try {
- 	        // Lấy process được chọn trong TableView
+ 	        // Lấy process được chọn trong bảng
  	        Process selectedProcess = tableProcesses.getSelectionModel().getSelectedItem();
 
  	        if (selectedProcess != null) {
- 	            // Đặt giá trị cho các trường nhập dựa trên thông tin của process đã chọn
+ 	            // Đặt dữ liệu vào cho các trường nhập
  	            idText.setText(String.valueOf(selectedProcess.getId()));
  	            arrivalTimeText.setText(String.valueOf(selectedProcess.getArrivalTime()));
  	            burstTimeText.setText(String.valueOf(selectedProcess.getBurstTime()));
  	            priorityText.setText(String.valueOf(selectedProcess.getPriority()));
- 	            idText.setEditable(false);
- 	            updateEdit.setVisible(true);
+ 	            idText.setEditable(false); // Không cho sửa id
+ 	            updateEdit.setVisible(true); // Hiện thị button update sau khi edit
  	        } else {
  	            // Hiển thị cảnh báo nếu không có mục nào được chọn
  	            Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -228,7 +264,7 @@ public class AlgorithmController implements Initializable {
  	            alert.showAndWait();
  	        }
  	    } catch (Exception ex) {
- 	        // Hiển thị lỗi nếu có bất kỳ ngoại lệ nào
+ 	        // Hiển thị lỗi nếu có trường hợp khác
  	        Alert alert = new Alert(Alert.AlertType.ERROR);
  	        alert.setTitle("Lỗi");
  	        alert.setHeaderText("Đã xảy ra lỗi khi chỉnh sửa");
@@ -238,12 +274,30 @@ public class AlgorithmController implements Initializable {
  	}
 
  	public void updateProcess(ActionEvent e) {
+ 		// Update sau khi edit 1 process được chọn
  	    try {
  	        // Lấy process được chọn trong TableView
  	        Process selectedProcess = tableProcesses.getSelectionModel().getSelectedItem();
-
- 	        if (selectedProcess != null) {
- 	            // Render process đã chọn ra trường nhập
+ 	        int newId = Integer.parseInt(idText.getText());
+	        int newArrivalTime = Integer.parseInt(arrivalTimeText.getText());
+	        int newBurstTime = Integer.parseInt(burstTimeText.getText());
+	        int newPriority = Integer.parseInt(priorityText.getText());
+	        if (newId < 0 || newArrivalTime < 0 || newBurstTime < 0 || newPriority < 0) {
+ 	            Alert alert = new Alert(Alert.AlertType.WARNING);
+ 	            alert.setTitle("Cảnh báo");
+ 	            alert.setHeaderText("Dữ liệu không hợp lệ");
+ 	            alert.setContentText("Không được nhập giá trị âm cho các trường dữ liệu!");
+ 	            alert.showAndWait();
+ 	            idText.clear();
+	            arrivalTimeText.clear();
+	            burstTimeText.clear();
+	            priorityText.clear();
+	            updateEdit.setVisible(false); // Ẩn button update edit
+	            idText.setEditable(true); // set lại idText về mặc định
+ 	            return;
+ 	        }
+	        else if (selectedProcess != null) {
+ 	            // Update lại process đã edit
  	            selectedProcess.setId(Integer.parseInt(idText.getText()));
  	            selectedProcess.setArrivalTime(Integer.parseInt(arrivalTimeText.getText()));
  	            selectedProcess.setBurstTime(Integer.parseInt(burstTimeText.getText()));
@@ -252,13 +306,13 @@ public class AlgorithmController implements Initializable {
  	            // refresh lại bảng
  	            tableProcesses.refresh();
  	            
- 	            //clear
+ 	            //clear các trường nhập
  	            idText.clear();
  	            arrivalTimeText.clear();
  	            burstTimeText.clear();
  	            priorityText.clear();
- 	            updateEdit.setVisible(false);
- 	            idText.setEditable(true);
+ 	            updateEdit.setVisible(false); // Ẩn button update edit
+ 	            idText.setEditable(true); // set lại idText về mặc định
  	        } else {
  	            // Hiển thị cảnh báo nếu không có mục nào được chọn
  	            Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -268,7 +322,7 @@ public class AlgorithmController implements Initializable {
  	            alert.showAndWait();
  	        }
  	    } catch (Exception ex) {
- 	        // Hiển thị lỗi nếu có bất kỳ ngoại lệ nào
+ 	    	// Hiển thị lỗi nếu có trường hợp khác
  	        Alert alert = new Alert(Alert.AlertType.ERROR);
  	        alert.setTitle("Lỗi");
  	        alert.setHeaderText("Đã xảy ra lỗi khi cập nhật");
@@ -282,10 +336,10 @@ public class AlgorithmController implements Initializable {
  	        // Xóa tất cả các process trong danh sách
  	        processList.clear();
  	        
- 	        // Nếu có bảng dữ liệu (table) cần cập nhật lại, có thể thêm dòng sau
- 	       tableProcesses.setItems(processList);
+ 	        // Cập nhật lại table process
+ 	        tableProcesses.setItems(processList);
  	        
- 	        // Hiển thị thông báo khi danh sách đã được xóa
+ 	        // Hiện thị thông báo đã xóa thành công
  	        Alert alert = new Alert(Alert.AlertType.INFORMATION);
  	        alert.setTitle("Thông báo");
  	        alert.setHeaderText("Danh sách tiến trình đã được xóa");
@@ -304,6 +358,15 @@ public class AlgorithmController implements Initializable {
  	
  	@FXML
      void runSimulation(ActionEvent event) throws IOException {
+ 		if (processList == null || processList.isEmpty()) {
+ 	        // Lỗi nếu process list trống 
+ 	        Alert alert = new Alert(Alert.AlertType.WARNING);
+ 	        alert.setTitle("Cảnh báo");
+ 	        alert.setHeaderText("Danh sách tiến trình trống");
+ 	        alert.setContentText("Vui lòng thêm ít nhất một tiến trình trước khi chạy mô phỏng.");
+ 	        alert.showAndWait();
+ 	        return; 
+ 	    }
 		switch(this.nameAlgorithm) {
 			case "FCFS":
 				runFCFS();
@@ -327,33 +390,61 @@ public class AlgorithmController implements Initializable {
  	{
  		CPUAlgorithm fcfs = new FCFS();
  		fcfs.schedule(processList);
+ 		// Cập nhật lại bảng live output
  		tblOutput.refresh();
- 		avgWaitTime.setText(Double.toString(fcfs.getAvgWaitingTime()) + " s");
- 		avgTurnAroundTime.setText(Double.toString(fcfs.getAvgTurnAroundTime()) + " s");
+ 		// Set giá trị cho bảng đánh giá CPU
+ 		avgWaitTime.setText(String.format("%.2f s", fcfs.getAvgWaitingTime()));
+ 	    avgTurnAroundTime.setText(String.format("%.2f s", fcfs.getAvgTurnAroundTime()));
  	}
 
  	void runSJN()
  	{
  		CPUAlgorithm sjn = new SJN();
  		sjn.schedule(processList);
+ 		// Cập nhật lại bảng live output
  		tblOutput.refresh();
- 		avgWaitTime.setText(Double.toString(sjn.getAvgWaitingTime()) + " s");
- 		avgTurnAroundTime.setText(Double.toString(sjn.getAvgTurnAroundTime()) + " s");
+ 		// Set giá trị cho bảng đánh giá CPU
+ 		avgWaitTime.setText(String.format("%.2f s", sjn.getAvgWaitingTime()));
+ 	    avgTurnAroundTime.setText(String.format("%.2f s", sjn.getAvgTurnAroundTime()));
  	}
  	
  	void runRR() {
- 		int getQuantumTime;
-		if(timeQuantumText.getText() != null && !timeQuantumText.getText().isEmpty()) {
-			getQuantumTime = Integer.parseInt(timeQuantumText.getText());
-		} else {
-			// default value quantum time
-			getQuantumTime = 90;
-		}
-		CPUAlgorithm rr = new RoundRobin(getQuantumTime);
-		rr.schedule(processList);
-		tblOutput.refresh();
-		avgWaitTime.setText(Double.toString(rr.getAvgWaitingTime()) + " s");
-		avgTurnAroundTime.setText(Double.toString(rr.getAvgTurnAroundTime()) + " s");
+ 		try {
+ 			int getQuantumTime;
+ 			if(timeQuantumText.getText() != null && !timeQuantumText.getText().isEmpty()) {
+ 				getQuantumTime = Integer.parseInt(timeQuantumText.getText());
+ 			} else {
+ 				// default value quantum time
+ 				getQuantumTime = 90;
+ 			}
+ 			if(getQuantumTime < 0) {
+ 				Alert alert = new Alert(Alert.AlertType.WARNING);
+ 	            alert.setTitle("Cảnh báo");
+ 	            alert.setHeaderText("Dữ liệu không hợp lệ");
+ 	            alert.setContentText("Không được nhập giá trị âm cho Time Quantum!");
+ 	            alert.showAndWait();
+ 	            return;
+ 			}
+ 			CPUAlgorithm rr = new RoundRobin(getQuantumTime);
+ 			rr.schedule(processList);
+ 			// Cập nhật lại bảng live output
+ 			tblOutput.refresh();
+ 			// Set giá trị cho bảng đánh giá CPU
+ 			System.out.println(getQuantumTime);
+ 			avgWaitTime.setText(String.format("%.2f s", rr.getAvgWaitingTime()));
+ 		    avgTurnAroundTime.setText(String.format("%.2f s", rr.getAvgTurnAroundTime())); 
+ 		}
+ 		
+	    catch (NumberFormatException ex) {
+ 			// Lỗi nhập không phải số
+ 			Alert alert = new Alert(Alert.AlertType.ERROR);
+ 	        alert.setTitle("Lỗi nhập liệu");
+ 	        alert.setHeaderText("Dữ liệu không hợp lệ");
+ 	        alert.setContentText("Vui lòng nhập số nguyên cho Time Quantum!");
+ 	        alert.showAndWait();
+ 		}
  	}
-
+ 	
+ 	// Gantt chart
+ 	
 }

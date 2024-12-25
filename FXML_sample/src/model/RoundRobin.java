@@ -50,19 +50,15 @@ public class RoundRobin extends CPUAlgorithm {
             remainingBurstTime.add(process.getBurstTime());
         }
 
-        System.out.println("Tiến trình | Arrival Time | Burst Time | Waiting Time | Burst Time");
-        System.out.println("---------------------------------------------------------------");
-
         while (!readyQueue.isEmpty()) {
-            Process currentProcess = readyQueue.poll();
+            Process currentProcess = readyQueue.poll(); // Lấy và xóa phần tử đầu tiên ra khỏi readyQueue
             int index = processes.indexOf(currentProcess);
             int burstTime = remainingBurstTime.get(index);
 
             if (currentTime < currentProcess.getArrivalTime()) {
                 currentTime = currentProcess.getArrivalTime();
             }
-
-            int startTime = currentTime;
+            
             int timeSpent = Math.min(burstTime, timeQuantum); // Xử lý trong Time Quantum
             currentTime += timeSpent;
             remainingBurstTime.set(index, burstTime - timeSpent);
@@ -76,49 +72,42 @@ public class RoundRobin extends CPUAlgorithm {
                 int waitingTime = finishTime - currentProcess.getArrivalTime() - currentProcess.getBurstTime();
                 int turnaroundTime = finishTime - currentProcess.getArrivalTime();
                 
-                // Trả waiting time cho process
+                // Tính waiting time cho process
                 currentProcess.calculateWaitingTime(finishTime - currentProcess.getBurstTime());
-                // Trả turn around time cho process
+                // Tính turn around time cho process
                 currentProcess.calculateTurnaroundTime();
                 
                 // Tính WAT và TAT
                 totalWaitingTime += waitingTime;
                 totalTurnaroundTime += turnaroundTime;
-
-                System.out.printf("    P%d     |      %d      |     %d     |     %d     |      %d%n",
-                        currentProcess.getId(), currentProcess.getArrivalTime(),
-                        currentProcess.getBurstTime(), currentProcess.getWaitingTime(), currentProcess.getTurnaroundTime());
             }
         }
 
         int n = processes.size();
-        avgWaitingTime = (double)totalWaitingTime / n;
-        avgTurnAroundTime = (double)totalTurnaroundTime / n;
-        System.out.println("---------------------------------------------------------------");
-        System.out.printf("Thời gian chờ trung bình: %.2f%n", avgWaitingTime);
-        System.out.printf("Thời gian quay vòng trung bình: %.2f%n", avgTurnAroundTime);
+        this.avgWaitingTime = (double)totalWaitingTime / n;
+        this.avgTurnAroundTime = (double)totalTurnaroundTime / n;
 	}
 	
 	@Override
 	public String displayHelp() {
 	    return """
-	    Thuật toán First Come First Serve (FCFS):
-	    - FCFS là thuật toán lập lịch đơn giản nhất.
-	    - Các tiến trình được xử lý theo thứ tự đến trước (Arrival Time).
-	    - Không có ưu tiên đặc biệt, không có gián đoạn.
-
-	    Quy trình:
-	    1. Sắp xếp các tiến trình dựa trên Arrival Time.
-	    2. Thực thi tiến trình đến trước, hoàn thành rồi mới thực thi tiến trình tiếp theo.
+	    Thuật toán Round Robin (RR):
+	    - Xử lý tiến trình theo vòng lặp với Time Quantum cố định.
+	    - Mỗi tiến trình được cấp CPU trong Time Quantum hoặc cho đến khi hoàn thành.
+	    - Tiến trình chưa hoàn thành sẽ được đưa lại cuối hàng đợi.
 
 	    Ưu điểm:
-	    - Đơn giản, dễ triển khai.
-	    - Không xảy ra Deadlock (khi được thiết kế đúng).
+	    - Cân bằng, không có tiến trình chờ lâu.
+	    - Phù hợp cho hệ thống đa người dùng.
 
 	    Nhược điểm:
-	    - Dễ dẫn đến hiệu ứng Convoy Effect (tiến trình ngắn phải chờ tiến trình dài).
-	    - Thời gian chờ đợi trung bình có thể cao nếu Arrival Time và Burst Time không tối ưu.
+	    - Time Quantum quá nhỏ: tăng chi phí chuyển ngữ cảnh.
+	    - Time Quantum quá lớn: giống FCFS, tăng thời gian chờ.
+
+	    Lưu ý: Time Quantum mặc định là 90ms.
 	    """;
 	}
+
+
 	
 }

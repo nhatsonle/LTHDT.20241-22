@@ -1,21 +1,12 @@
 package controller;
 
 import javafx.stage.Stage;
-import model.CPUAlgorithm;
-import model.FCFS;
-import model.RoundRobin;
-import model.SJN;
 import view.HelpView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 public class LandingPageController {
     private Stage primaryStage;
@@ -28,7 +19,6 @@ public class LandingPageController {
         return this.primaryStage;
     }
 
-    @FXML
     public void loadAlgorithmPage(String algorithmName) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/sample.fxml"));
@@ -39,6 +29,8 @@ public class LandingPageController {
             
             // Truyền tên của thuận toán 
             algorithmController.setTitle(algorithmName);
+            
+            // set primary stage cho algorithmController để thực hiện back lại trang	
             algorithmController.setPrimaryStage(this.primaryStage);
             // Hiển thị giao diện
             Scene scene = new Scene(root, 800, 600);

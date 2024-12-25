@@ -71,7 +71,7 @@ public class Process {
 		return turnaroundTime;
 	}
 	
-	
+	// Xử lý nếu trùng id
 	@Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
