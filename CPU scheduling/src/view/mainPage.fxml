@@ -65,7 +65,7 @@
             </columns>
         </TableView>
     </VBox>
-   <VBox alignment="BASELINE_CENTER" prefHeight="200.0">
+   <VBox alignment="BASELINE_CENTER" minHeight="-Infinity" prefHeight="200.0">
       <children>
          <Label text="UPDATE" textFill="#612424">
             <VBox.margin>
@@ -163,7 +163,7 @@
         </top>
          <center>
             <VBox alignment="CENTER" spacing="10" style="-fx-padding: 10;" BorderPane.alignment="CENTER">
-               <HBox alignment="CENTER" spacing="20" style="-fx-padding: 10;">
+               <HBox alignment="CENTER" prefHeight="300.0" spacing="20" style="-fx-padding: 10;">
                    <!-- Live Output Table -->
                    <VBox prefHeight="222.0" prefWidth="558.0" spacing="10.0" style="-fx-border-color: black; -fx-border-width: 1;" translateX="-17.0">
                        <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Live Output Table">
@@ -174,7 +174,7 @@
                         <Insets left="10.0" />
                      </padding>
                        </Label>
-                       <TableView fx:id="tblOutput" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="180.0" prefWidth="600.0">
+                       <TableView fx:id="tblOutput" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="224.0" prefWidth="600.0">
                            <columns>
                                <TableColumn fx:id="colID" style="-fx-alignment: CENTER;" text="Process ID" />
                                <TableColumn fx:id="colArrival" style="-fx-alignment: CENTER;" text="Arrival Time" />
@@ -190,7 +190,7 @@
    					
                    <!-- Scheduling Metrics -->
                    <VBox minWidth="-Infinity" prefWidth="300" spacing="10" style="-fx-border-color: black; -fx-border-width: 1;">
-                       <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Scheduling Metrics">
+                       <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Scheduling Metrics" translateY="-14.0">
                            <VBox.margin>
                                <Insets left="56.0" top="42.0" />
                            </VBox.margin>
@@ -198,15 +198,21 @@
                   <HBox alignment="CENTER" prefHeight="27.0" prefWidth="300.0" spacing="10.0">
                      <children>
                              <Label prefHeight="27.0" prefWidth="159.0" style="-fx-background-color: cyan; -fx-padding: 5;" text="Average Waiting Time: " />
-                             <Label fx:id="avgWaitTime" prefHeight="27.0" prefWidth="110.0" style="-fx-background-color: cyan; -fx-padding: 5;" text="5.50 s" />
+                             <Label fx:id="avgWaitTime" prefHeight="27.0" prefWidth="110.0" style="-fx-background-color: cyan; -fx-padding: 5;" text="0 s" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" spacing="10.0">
                      <children>
                         <Label prefHeight="27.0" prefWidth="158.0" style="-fx-background-color: cyan; -fx-padding: 5;" text="Average Turn Around Time:" />
-                        <Label fx:id="avgTurnAroundTime" prefHeight="27.0" prefWidth="110.0" style="-fx-background-color: cyan; -fx-padding: 5;" text="5.50 s" />
+                        <Label fx:id="avgTurnAroundTime" prefHeight="27.0" prefWidth="110.0" style="-fx-background-color: cyan; -fx-padding: 5;" text="0 s" />
                      </children>
                   </HBox>
+                  <HBox alignment="CENTER" spacing="10.0">
+                        <children>
+                           <Label prefHeight="27.0" prefWidth="158.0" style="-fx-background-color: cyan; -fx-padding: 5;" text="CPU Utilization" />
+                           <Label fx:id="cpuUtilization" prefHeight="27.0" prefWidth="110.0" style="-fx-background-color: cyan; -fx-padding: 5;" text="0 %" />
+                        </children>
+                     </HBox>
                    </VBox>
                </HBox>
             </VBox>

@@ -27,8 +27,6 @@ public class GanttChartSchedule {
         }
 	}
 	
-
-	
 	private void drawGanttChartCell(Process p, double totalTime, HBox ganttChart, boolean last, Scene scene, double timer) {
         VBox v = new VBox();
         v.setAlignment(Pos.CENTER);
