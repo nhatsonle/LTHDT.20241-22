@@ -92,31 +92,27 @@ public class RoundRobin extends CPUAlgorithm {
         this.setCpuUtilization(((double) totalBurstTime / totalTime) * 100);
 	}
 	
-	@Override
-	public String displayHelp()
-	{
-		return "Giải thích của thuật toán Round Robin";
-	}
 	
-//	@Override
-//	public String displayHelp() {
-//	    return """
-//	    Thuật toán Round Robin (RR):
-//	    - Xử lý tiến trình theo vòng lặp với Time Quantum cố định.
-//	    - Mỗi tiến trình được cấp CPU trong Time Quantum hoặc cho đến khi hoàn thành.
-//	    - Tiến trình chưa hoàn thành sẽ được đưa lại cuối hàng đợi.
-//
-//	    Ưu điểm:
-//	    - Cân bằng, không có tiến trình chờ lâu.
-//	    - Phù hợp cho hệ thống đa người dùng.
-//
-//	    Nhược điểm:
-//	    - Time Quantum quá nhỏ: tăng chi phí chuyển ngữ cảnh.
-//	    - Time Quantum quá lớn: giống FCFS, tăng thời gian chờ.
-//
-//	    Lưu ý: Time Quantum mặc định là 90ms.
-//	    """;
-//	}
+	
+	@Override
+	public String displayHelp() {
+	    return """
+	    Thuật toán Round Robin (RR):
+	    - Xử lý tiến trình theo vòng lặp với Time Quantum cố định.
+	    - Mỗi tiến trình được cấp CPU trong Time Quantum hoặc cho đến khi hoàn thành.
+	    - Tiến trình chưa hoàn thành sẽ được đưa lại cuối hàng đợi.
+
+	    Ưu điểm:
+	    - Cân bằng, không có tiến trình chờ lâu.
+	    - Phù hợp cho hệ thống đa người dùng.
+
+	    Nhược điểm:
+	    - Time Quantum quá nhỏ: tăng chi phí chuyển ngữ cảnh.
+	    - Time Quantum quá lớn: giống FCFS, tăng thời gian chờ.
+
+	    Lưu ý: Time Quantum mặc định là 90ms.
+	    """;
+	}
 
 
 	

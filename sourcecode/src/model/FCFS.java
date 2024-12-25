@@ -46,34 +46,30 @@ public class FCFS extends CPUAlgorithm {
         this.setAvgTurnAroundTime((double)totalTurnAroundTime / n);
         this.setCpuUtilization(((double) totalBurstTime / totalTime) * 100);
 	}
+	
+	
+	
 	@Override
 	public String displayHelp() {
-		// TODO Auto-generated method stub
-		return "Giải thích của thuật toán FCFS";
+	    return """
+	    Thuật toán First Come First Serve (FCFS):
+	    - FCFS là thuật toán lập lịch đơn giản nhất.
+	    - Các tiến trình được xử lý theo thứ tự đến trước (Arrival Time).
+	    - Không có ưu tiên đặc biệt, không có gián đoạn.
+
+	    Quy trình:
+	    1. Sắp xếp các tiến trình dựa trên Arrival Time.
+	    2. Thực thi tiến trình đến trước, hoàn thành rồi mới thực thi tiến trình tiếp theo.
+
+	    Ưu điểm:
+	    - Đơn giản, dễ triển khai.
+	    - Không xảy ra Deadlock (khi được thiết kế đúng).
+
+	    Nhược điểm:
+	    - Dễ dẫn đến hiệu ứng Convoy Effect (tiến trình ngắn phải chờ tiến trình dài).
+	    - Thời gian chờ đợi trung bình có thể cao nếu Arrival Time và Burst Time không tối ưu.
+	    """;
 	}
-	
-	
-//	@Override
-//	public String displayHelp() {
-//	    return """
-//	    Thuật toán First Come First Serve (FCFS):
-//	    - FCFS là thuật toán lập lịch đơn giản nhất.
-//	    - Các tiến trình được xử lý theo thứ tự đến trước (Arrival Time).
-//	    - Không có ưu tiên đặc biệt, không có gián đoạn.
-//
-//	    Quy trình:
-//	    1. Sắp xếp các tiến trình dựa trên Arrival Time.
-//	    2. Thực thi tiến trình đến trước, hoàn thành rồi mới thực thi tiến trình tiếp theo.
-//
-//	    Ưu điểm:
-//	    - Đơn giản, dễ triển khai.
-//	    - Không xảy ra Deadlock (khi được thiết kế đúng).
-//
-//	    Nhược điểm:
-//	    - Dễ dẫn đến hiệu ứng Convoy Effect (tiến trình ngắn phải chờ tiến trình dài).
-//	    - Thời gian chờ đợi trung bình có thể cao nếu Arrival Time và Burst Time không tối ưu.
-//	    """;
-//	}
 
 
 }
