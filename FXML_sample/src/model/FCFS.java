@@ -22,10 +22,14 @@ public class FCFS extends CPUAlgorithm {
 		int currentTime = 0;
 		int totalWaitingTime = 0; // Tổng thời gian chờ
 		int totalTurnAroundTime = 0; // Tổng thời gian quay vòng
+		int totalBurstTime = 0;
 		
 		for(Process process: processes) {
-			// Nếu currentTime < process.getArrivalTime()
-			currentTime = Math.max(currentTime, process.getArrivalTime());
+			// Nếu currentTime < process.getArrivalTime() thì
+			// CPU nhàn rỗi do không có tiến trình sẵn sàng
+            if (currentTime < process.getArrivalTime()) {
+                currentTime = process.getArrivalTime();
+            }
 			
 			// Tính waiting time cho process
 			process.calculateWaitingTime(currentTime);
@@ -37,11 +41,15 @@ public class FCFS extends CPUAlgorithm {
 	        int turnaroundTime = process.getTurnaroundTime();
 			totalWaitingTime += waitingTime;
 			totalTurnAroundTime += turnaroundTime;
+			
+			totalBurstTime += process.getBurstTime();
 			currentTime +=  process.getBurstTime();	
 		}
+		int totalTime = currentTime;
 		int n = processes.size();
-		this.avgWaitingTime = (double)totalWaitingTime / n;
-        this.avgTurnAroundTime = (double)totalTurnAroundTime / n;
+		this.setAvgWaitingTime((double)totalWaitingTime / n);
+        this.setAvgTurnAroundTime((double)totalTurnAroundTime / n);
+        this.setCpuUtilization(((double) totalBurstTime / totalTime) * 100);
 	}
 	
 	@Override

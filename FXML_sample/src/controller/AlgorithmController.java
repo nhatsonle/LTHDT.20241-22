@@ -84,6 +84,8 @@ public class AlgorithmController implements Initializable {
     private Label avgTurnAroundTime;
     @FXML
     private Label avgWaitTime;
+    @FXML
+    private Label cpuUtilization;
     
 	private Stage stage;
 	// Set the primaryStage in the controller
@@ -128,11 +130,9 @@ public class AlgorithmController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
     	// Tạo danh sách mới processes
-    	processList.add(new Process(1, 0, 8, 1));
-    	processList.add(new Process(2, 2, 6, 2));
-    	processList.add(new Process(3, 4, 6, 3));
-    	processList.add(new Process(4, 6, 12, 4));
-    	processList.add(new Process(5, 8, 3, 5));
+    	processList.add(new Process(1, 0, 5, 1));
+    	processList.add(new Process(2, 6, 3, 2));
+    	processList.add(new Process(3, 8, 2, 3));
     	// Init table processes 
 		idColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("id"));
 		arrivalTimeColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("arrivalTime"));
@@ -166,6 +166,7 @@ public class AlgorithmController implements Initializable {
         // Bảng đánh giá CPU
         avgTurnAroundTime.setText("0 s");
         avgWaitTime.setText("0 s");
+        cpuUtilization.setText("0 %");
     }
     
     
@@ -395,6 +396,7 @@ public class AlgorithmController implements Initializable {
  		// Set giá trị cho bảng đánh giá CPU
  		avgWaitTime.setText(String.format("%.2f s", fcfs.getAvgWaitingTime()));
  	    avgTurnAroundTime.setText(String.format("%.2f s", fcfs.getAvgTurnAroundTime()));
+ 	   cpuUtilization.setText(String.format("%.2f %%", fcfs.getCpuUtilization()));
  	}
 
  	void runSJN()
@@ -406,6 +408,7 @@ public class AlgorithmController implements Initializable {
  		// Set giá trị cho bảng đánh giá CPU
  		avgWaitTime.setText(String.format("%.2f s", sjn.getAvgWaitingTime()));
  	    avgTurnAroundTime.setText(String.format("%.2f s", sjn.getAvgTurnAroundTime()));
+ 	    cpuUtilization.setText(String.format("%.2f %%", sjn.getCpuUtilization()));
  	}
  	
  	void runRR() {
@@ -433,6 +436,7 @@ public class AlgorithmController implements Initializable {
  			System.out.println(getQuantumTime);
  			avgWaitTime.setText(String.format("%.2f s", rr.getAvgWaitingTime()));
  		    avgTurnAroundTime.setText(String.format("%.2f s", rr.getAvgTurnAroundTime())); 
+ 		   cpuUtilization.setText(String.format("%.2f %%", rr.getCpuUtilization()));
  		}
  		
 	    catch (NumberFormatException ex) {

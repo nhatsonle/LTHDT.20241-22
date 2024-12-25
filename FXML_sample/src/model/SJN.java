@@ -17,6 +17,7 @@ public class SJN extends CPUAlgorithm {
 		int currentTime = 0;
         int totalWaitingTime = 0;
         int totalTurnaroundTime = 0;
+        int totalBurstTime = 0;
         while(!readyQueue.isEmpty()) {
         	// Tạo danh sách mới tiến trình đã đến
         	List<Process> availableProcesses = new ArrayList<>();
@@ -62,11 +63,14 @@ public class SJN extends CPUAlgorithm {
             currentTime += selectedProcess.getBurstTime();
             // Xóa tiến trình đã thực thi
             readyQueue.remove(selectedProcess);
+            totalBurstTime += selectedProcess.getBurstTime();
         }
 
-        int n = processes.size();
-        this.avgWaitingTime = (double)totalWaitingTime / n;
-        this.avgTurnAroundTime = (double)totalTurnaroundTime / n;
+        int totalTime = currentTime;
+		int n = processes.size();
+		this.setAvgWaitingTime((double)totalWaitingTime / n);
+        this.setAvgTurnAroundTime((double)totalTurnaroundTime / n);
+        this.setCpuUtilization(((double) totalBurstTime / totalTime) * 100);
         
         }
 	@Override

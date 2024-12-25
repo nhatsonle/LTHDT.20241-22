@@ -42,12 +42,14 @@ public class RoundRobin extends CPUAlgorithm {
         int currentTime = 0;
         int totalWaitingTime = 0;
         int totalTurnaroundTime = 0;
+        int totalBurstTime = 0;
         // Lưu thời gian thực thi còn lại của mỗi tiến trình
         List<Integer> remainingBurstTime = new ArrayList<>();
 
         // Lưu thời gian burst ban đầu của mỗi tiến trình
         for (Process process : processes) {
             remainingBurstTime.add(process.getBurstTime());
+            totalBurstTime += process.getBurstTime();
         }
 
         while (!readyQueue.isEmpty()) {
@@ -83,9 +85,11 @@ public class RoundRobin extends CPUAlgorithm {
             }
         }
 
-        int n = processes.size();
-        this.avgWaitingTime = (double)totalWaitingTime / n;
-        this.avgTurnAroundTime = (double)totalTurnaroundTime / n;
+        int totalTime = currentTime;
+		int n = processes.size();
+		this.setAvgWaitingTime((double)totalWaitingTime / n);
+        this.setAvgTurnAroundTime((double)totalTurnaroundTime / n);
+        this.setCpuUtilization(((double) totalBurstTime / totalTime) * 100);
 	}
 	
 	@Override
