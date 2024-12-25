@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 
 
 public class Main extends Application {
@@ -15,7 +16,7 @@ public class Main extends Application {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/landingPage.fxml"));
 	    Parent root = loader.load();
 
-	    FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/view/sample.fxml"));
+	    FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/view/mainPage.fxml"));
 	    Parent algorithmRoot = loader2.load(); 
 
 	    AlgorithmController algorithmController = loader2.getController();
@@ -26,6 +27,7 @@ public class Main extends Application {
 
 	    Scene scene = new Scene(root, 800, 600);
 	    primaryStage.setTitle("CPU Scheduling Simulator");
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("icon.png")));
 	    primaryStage.setScene(scene);
 	    primaryStage.show();
 	}

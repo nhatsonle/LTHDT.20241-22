@@ -1,21 +1,35 @@
 package controller;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
 import model.*;
 import model.Process;
+import model.GanttChartSchedule;
 import view.HelpView;
 public class AlgorithmController implements Initializable {
 	private String nameAlgorithm;
@@ -45,8 +59,7 @@ public class AlgorithmController implements Initializable {
 	private TextField timeQuantumText;
 	@FXML
 	private Button updateEdit;
-	@FXML
-    private Button runButton;
+	
 	
 	private ObservableList<Process> processList = FXCollections.observableArrayList();
    
@@ -67,12 +80,20 @@ public class AlgorithmController implements Initializable {
     @FXML
     private Label avgWaitTime;
     
+    @FXML
+    private Canvas ganttCanvas;
+    DecimalFormat df = new DecimalFormat("###.###");
+
+    
+    @FXML
+    private Label timeLabel;
 
 	private Stage stage;
 	// Set the primaryStage in the controller
     public void setPrimaryStage(Stage stage) {
         this.stage = stage;
     }
+    
     
     @FXML
     void backToMainPage() throws IOException {
@@ -107,6 +128,8 @@ public class AlgorithmController implements Initializable {
     public String getNameAlgorithm() {
     	return this.nameAlgorithm;
     }
+    
+    
     
     // Init cho trang
     @Override
@@ -328,8 +351,8 @@ public class AlgorithmController implements Initializable {
  		CPUAlgorithm fcfs = new FCFS();
  		fcfs.schedule(processList);
  		tblOutput.refresh();
- 		avgWaitTime.setText(Double.toString(fcfs.getAvgWaitingTime()) + " s");
- 		avgTurnAroundTime.setText(Double.toString(fcfs.getAvgTurnAroundTime()) + " s");
+ 		avgWaitTime.setText(df.format(fcfs.getAvgWaitingTime()) + " s");
+ 		avgTurnAroundTime.setText(df.format(fcfs.getAvgTurnAroundTime()) + " s");
  	}
 
  	void runSJN()
@@ -337,23 +360,64 @@ public class AlgorithmController implements Initializable {
  		CPUAlgorithm sjn = new SJN();
  		sjn.schedule(processList);
  		tblOutput.refresh();
- 		avgWaitTime.setText(Double.toString(sjn.getAvgWaitingTime()) + " s");
- 		avgTurnAroundTime.setText(Double.toString(sjn.getAvgTurnAroundTime()) + " s");
+ 		avgWaitTime.setText(df.format(sjn.getAvgWaitingTime()) + " s");
+ 		avgTurnAroundTime.setText(df.format(sjn.getAvgTurnAroundTime()) + " s");
  	}
  	
  	void runRR() {
  		int getQuantumTime;
-		if(timeQuantumText.getText() != null && !timeQuantumText.getText().isEmpty()) {
-			getQuantumTime = Integer.parseInt(timeQuantumText.getText());
-		} else {
-			// default value quantum time
-			getQuantumTime = 90;
-		}
+ 		if(timeQuantumText.getText() != null && !timeQuantumText.getText().isEmpty()) {
+ 			getQuantumTime = Integer.parseInt(timeQuantumText.getText());
+ 		} else {
+ 			// default value quantum time
+ 			getQuantumTime = 90;
+ 		}
 		CPUAlgorithm rr = new RoundRobin(getQuantumTime);
 		rr.schedule(processList);
 		tblOutput.refresh();
-		avgWaitTime.setText(Double.toString(rr.getAvgWaitingTime()) + " s");
-		avgTurnAroundTime.setText(Double.toString(rr.getAvgTurnAroundTime()) + " s");
+		avgWaitTime.setText(df.format(rr.getAvgWaitingTime()) + " s");
+		avgTurnAroundTime.setText(df.format(rr.getAvgTurnAroundTime()) + " s");
  	}
+ 	
+ 	@FXML
+ 	void onDraw(ActionEvent event) throws IOException
+ 	{	
+ 		Stage stage = new Stage();
+        stage.setTitle("Gantt Chart");
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/application/icon.png")));
+        //StackPane spane = new StackPane();
+        StackPane layout = new StackPane();
+        HBox ganttChart = new HBox();
+        layout.setAlignment(Pos.CENTER);
+        VBox ganttChartContainer = new VBox();
+        ganttChartContainer.getChildren().add(ganttChart);
+        ganttChartContainer.setAlignment(Pos.CENTER);
+        layout.getChildren().add(ganttChartContainer);
 
+        Scene scene = new Scene(layout, 900, 400);
+        stage.setScene(scene);
+        stage.show();
+
+        DoubleProperty leftPadding = new SimpleDoubleProperty(0.1 * scene.getWidth());
+        ganttChartContainer.paddingProperty().bind(Bindings.createObjectBinding(() -> new Insets(0, 0, 0, leftPadding.doubleValue()), leftPadding));
+        
+        if (this.nameAlgorithm == "FCFS") {
+            GanttChartSchedule.sortFCFS(ganttChart, processList, scene);
+        } else if(this.nameAlgorithm == "SJN")
+        {
+        	GanttChartSchedule.sortSJN(ganttChart, processList, scene);
+        }
+        else if(this.nameAlgorithm == "Round Robin")
+        {
+        	int getQuantumTime;
+        	if(timeQuantumText.getText() != null && !timeQuantumText.getText().isEmpty()) {
+        		getQuantumTime = Integer.parseInt(timeQuantumText.getText());
+        	} else {
+        		// default value quantum time
+        		getQuantumTime = 90;
+        	}
+        	GanttChartSchedule.sortRoundRobin(ganttChart, processList, getQuantumTime, scene);
+
+        }
+ 	}
 }

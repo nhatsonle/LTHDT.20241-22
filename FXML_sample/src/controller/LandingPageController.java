@@ -31,7 +31,7 @@ public class LandingPageController {
     @FXML
     public void loadAlgorithmPage(String algorithmName) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/sample.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/mainPage.fxml"));
             Parent root = loader.load();
 
             // Lấy controller của sample (AlgorithmController)

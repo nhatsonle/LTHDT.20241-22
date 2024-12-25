@@ -12,6 +12,9 @@ public class Process {
 	private int priority;
 	private int waitingTime;
 	private int turnaroundTime;
+	private int startingTime;
+	private int finishTime;
+	private int remainingTime;
 	private static final Random random = new Random(); // Khởi tạo Random cho priority
 	
 	public Process(int id, int arrivalTime, int burstTime) {
@@ -28,6 +31,30 @@ public class Process {
 		this.priority = priority;
 	}
 	
+	public int getStartingTime() {
+		return startingTime;
+	}
+
+	public void setStartingTime(int startingTime) {
+		this.startingTime = startingTime;
+	}
+
+	public int getFinishTime() {
+		return finishTime;
+	}
+
+	public void setFinishTime(int finishTime) {
+		this.finishTime = finishTime;
+	}
+
+	public int getRemainingTime() {
+		return remainingTime;
+	}
+
+	public void setRemainingTime(int remainingTime) {
+		this.remainingTime = remainingTime;
+	}
+
 	public Process () {
 		
 	}
@@ -79,4 +106,10 @@ public class Process {
         Process process = (Process) obj;
         return id == process.id || (arrivalTime == process.arrivalTime && burstTime == process.burstTime && priority == process.priority);
     }
+
+	public void setWaitingTime(int waitingTime) {
+		this.waitingTime = waitingTime;
+	}
+
+	
 }
